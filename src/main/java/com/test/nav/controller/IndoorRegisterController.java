@@ -1,6 +1,7 @@
 package com.test.nav.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.test.nav.dao.IndoorRegisterDao;
-import com.test.nav.model.AJIndoorRegister;
+import com.test.nav.model.DTOIndoorRegister;
 import com.test.nav.util.AppUtil;
 
 /**
@@ -19,6 +20,7 @@ import com.test.nav.util.AppUtil;
 public class IndoorRegisterController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static String INSERT_OR_EDIT = "/indoor_register.jsp";
+	private static String EDIT = "/edit_indoor_register.jsp";
 	private static String INDOOR_REPORT = "/indoor_register_report.jsp";
 	private IndoorRegisterDao indoorRegisterDao;
 
@@ -43,20 +45,19 @@ public class IndoorRegisterController extends HttpServlet {
 			if (action.equalsIgnoreCase("delete")) {
 				int id = Integer.parseInt(request.getParameter("id"));
 				System.out.println("Request to delete indoor register for id:" + id);
-				//indoorRegisterDao.deleteIndoorRegister(id);
+				indoorRegisterDao.deleteIndoorRegister(id);
 				forward = INDOOR_REPORT;
-				// TODO: Fetch month and year from session
 				HttpSession session = request.getSession();
 				String month = session.getAttribute("REPORT_MONTH").toString();
 				String year = session.getAttribute("REPORT_YEAR").toString();
 				request.setAttribute("irs", indoorRegisterDao
 						.getAllIndoorRegisters(month, year));
 			} else if (action.equalsIgnoreCase("edit")) {
-				forward = INSERT_OR_EDIT;
+				forward = EDIT;
 				int id = Integer.parseInt(request.getParameter("id"));
 				System.out.println("request to edit indoor register for id:" + id);
-				AJIndoorRegister ir = indoorRegisterDao.getIndoorRegisterById(id);
-				request.setAttribute("indoor_register", ir);
+				DTOIndoorRegister ir = indoorRegisterDao.getIndoorRegisterById(id);
+				request.setAttribute("ir", ir);
 			} else if (action.equalsIgnoreCase("report")) {
 				forward = INDOOR_REPORT;
 				String month = request.getParameter("month");
@@ -91,5 +92,40 @@ public class IndoorRegisterController extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+		
+		try {
+			String id = request.getParameter("id");
+			if (id == null || id.isEmpty()) {
+				
+			} else {
+				DTOIndoorRegister ir = new DTOIndoorRegister();
+				ir.setId(Integer.parseInt(id));
+				ir.setAdmitDate(dateFormatter.parse(request.getParameter("admitDate")));
+				ir.setDischargeDate(dateFormatter.parse(request.getParameter("dischargeDate")));
+				ir.setPatientName(request.getParameter("pName"));
+				ir.setGender(request.getParameter("gender"));
+				ir.setPatientAddress(request.getParameter("pAddress"));
+				ir.setAge(Integer.parseInt(request.getParameter("age")));
+				
+				String diagnosis = request.getParameter("diagnosis");
+				if(diagnosis.equalsIgnoreCase("other")){
+					ir.setDiagnosis(request.getParameter("OtherDiagnosis"));
+				} else {
+					ir.setDiagnosis(diagnosis);
+				}
+	
+				ir.setRemarks(request.getParameter("remarks"));
+				
+				String fees = request.getParameter("fees");
+				if(fees != null && fees.length() > 0) {
+					ir.setFees(Double.valueOf(fees));
+				}
+				
+				indoorRegisterDao.updateIndoorRegister(ir);
+			}
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
 	}
 }

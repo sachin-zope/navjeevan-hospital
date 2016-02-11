@@ -1,5 +1,6 @@
 package com.test.nav.transformer;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import com.test.nav.model.DTOIndoorRegister;
 
 public class IndoorRegisterTransformer {
 
-	public List<DTOIndoorRegister> transform(LazyList<AJIndoorRegister> ajIndoorRegisters) {
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	
+	public List<DTOIndoorRegister> transformList(LazyList<AJIndoorRegister> ajIndoorRegisters) {
 		List<DTOIndoorRegister> irs = new ArrayList<DTOIndoorRegister>();
 		for (AJIndoorRegister ajRegister : ajIndoorRegisters) {
 			irs.add(transform(ajRegister));
@@ -18,11 +21,18 @@ public class IndoorRegisterTransformer {
 		return irs;
 	}
 	
-	private DTOIndoorRegister transform(AJIndoorRegister ajIndoorRegister) {
+	public DTOIndoorRegister transform(AJIndoorRegister ajIndoorRegister) {
 		DTOIndoorRegister register = new DTOIndoorRegister();
 		register.setId(ajIndoorRegister.getInteger(AJIndoorRegister.ID));
 		register.setIpdNo(ajIndoorRegister.getLong(AJIndoorRegister.IPD_NO));
 		register.setSerialNo(ajIndoorRegister.getInteger(AJIndoorRegister.SERIAL_NO));
+		
+		/*register.setAdmitDate(sdf.format(ajIndoorRegister.getDate(AJIndoorRegister.ADMIT_DATE)));
+		if (ajIndoorRegister.getDate(AJIndoorRegister.DISCHARGE_DATE) != null) {
+			register.setDischargeDate(sdf.format(ajIndoorRegister.getDate(AJIndoorRegister.DISCHARGE_DATE)));
+		} else {
+			register.setDischargeDate("");
+		}*/
 		register.setAdmitDate(ajIndoorRegister.getDate(AJIndoorRegister.ADMIT_DATE));
 		register.setDischargeDate(ajIndoorRegister.getDate(AJIndoorRegister.DISCHARGE_DATE));
 		register.setPatientName(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_NAME));

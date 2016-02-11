@@ -5,7 +5,7 @@
 	<artifactId>navjeevan-hospital</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>hosp Maven Webapp</name>
+	<name>navjeevan-hospital Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
@@ -48,7 +48,7 @@
 
 	</dependencies>
 	<build>
-		<finalName>hosp</finalName>
+		<finalName>navjeevan-hospital</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.javalite</groupId>

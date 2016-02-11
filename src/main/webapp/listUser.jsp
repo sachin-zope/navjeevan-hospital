@@ -29,7 +29,7 @@
                     <td><fmt:formatDate pattern="yyyy-MMM-dd" value="${user.dob}" /></td>
                     <td><c:out value="${user.email}" /></td>
                     <td><a href="UserController?action=edit&userId=<c:out value="${user.userid}"/>">Update</a></td>
-                    <td><a href="UserController?action=delete&userId=<c:out value="${user.userid}"  onclick="return confirm('Are you sure you want to delete this item?');"/>">Delete</a></td>
+                    <td><a href="UserController?action=delete&userId=<c:out value="${user.userid}"/>">Delete</a></td>
                 </tr>
             </c:forEach>
         </tbody>
