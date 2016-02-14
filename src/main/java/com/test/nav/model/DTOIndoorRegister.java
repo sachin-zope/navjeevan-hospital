@@ -2,11 +2,12 @@ package com.test.nav.model;
 
 import java.util.Date;
 
-public class DTOIndoorRegister {
+public class DTOIndoorRegister implements Comparable<DTOIndoorRegister> {
 
 	private int id;
 	private Long ipdNo;
 	private int serialNo;
+	private int mtpSerialNo;
 	private Date admitDate;
 	private Date dischargeDate;
 	private String patientName;
@@ -17,9 +18,9 @@ public class DTOIndoorRegister {
 	private String treatment;
 	private String remarks;
 	private double fees;
-	private DeliveryRegister deliveryRegister;
-	private MTPRegister mtpRegister;
-	private OTRegister otRegister;
+	private int deliveryRegisterId;
+	private int mtpRegisterId;
+	private int otRegisterId;
 	private Date createDate;
 	private Date updateDate;
 
@@ -48,6 +49,14 @@ public class DTOIndoorRegister {
 
 	public void setSerialNo(int serialNo) {
 		this.serialNo = serialNo;
+	}
+	
+	public int getMtpSerialNo() {
+		return mtpSerialNo;
+	}
+
+	public void setMtpSerialNo(int mtpSerialNo) {
+		this.mtpSerialNo = mtpSerialNo;
 	}
 
 	public Date getAdmitDate() {
@@ -130,28 +139,28 @@ public class DTOIndoorRegister {
 		this.fees = fees;
 	}
 	
-	public DeliveryRegister getDeliveryRegister() {
-		return deliveryRegister;
+	public int getDeliveryRegisterId() {
+		return deliveryRegisterId;
 	}
 
-	public void setDeliveryRegister(DeliveryRegister deliveryRegister) {
-		this.deliveryRegister = deliveryRegister;
+	public void setDeliveryRegisterId(int deliveryRegisterId) {
+		this.deliveryRegisterId = deliveryRegisterId;
 	}
 
-	public MTPRegister getMtpRegister() {
-		return mtpRegister;
+	public int getMtpRegisterId() {
+		return mtpRegisterId;
 	}
 
-	public void setMtpRegister(MTPRegister mtpRegister) {
-		this.mtpRegister = mtpRegister;
-	}
-	
-	public OTRegister getOtRegister() {
-		return otRegister;
+	public void setMtpRegisterId(int mtpRegisterId) {
+		this.mtpRegisterId = mtpRegisterId;
 	}
 
-	public void setOtRegister(OTRegister otRegister) {
-		this.otRegister = otRegister;
+	public int getOtRegisterId() {
+		return otRegisterId;
+	}
+
+	public void setOtRegisterId(int otRegisterId) {
+		this.otRegisterId = otRegisterId;
 	}
 
 	public Date getCreateDate() {
@@ -172,11 +181,15 @@ public class DTOIndoorRegister {
 
 	@Override
 	public String toString() {
-		return "IndoorRegister [id=" + id + ", ipdno= " + ipdNo + ", admitDate=" + admitDate
-				+ ", dischargeDate=" + dischargeDate + ", patientName=" + patientName
-				+ ", gender=" + gender + ", patientAddress=" + patientAddress
-				+ ", diagnosis=" + diagnosis + ", treatment=" + treatment + ", remarks="
-				+ remarks + ", fees=" + fees
-				+ "]";
+		return "DTOIndoorRegister [id=" + id + ", ipdNo=" + ipdNo + ", serialNo=" + serialNo + ", mtpSerialNo="
+				+ mtpSerialNo + ", admitDate=" + admitDate + ", dischargeDate=" + dischargeDate + ", patientName=" + patientName
+				+ ", gender=" + gender + ", patientAddress=" + patientAddress + ", age=" + age + ", diagnosis=" + diagnosis
+				+ ", treatment=" + treatment + ", remarks=" + remarks + ", fees=" + fees + ", deliveryRegisterId="
+				+ deliveryRegisterId + ", mtpRegisterId=" + mtpRegisterId + ", otRegisterId=" + otRegisterId + ", createDate="
+				+ createDate + ", updateDate=" + updateDate + "]";
+	}
+
+	public int compareTo(DTOIndoorRegister o) {
+		return this.getDischargeDate().compareTo(o.getDischargeDate());
 	}
 }

@@ -2,7 +2,7 @@ package com.test.nav.model;
 
 import java.util.Date;
 
-public class MTPRegisterDetails {
+public class DTOMtpRegisterDetails {
 	private int id;
 	private String pName;
 	private String gender;
@@ -10,7 +10,7 @@ public class MTPRegisterDetails {
 	private int age;
 	private String remarks;
 	private double fees;
-	private MTPRegister mtpRegister;
+	private DTOMtpRegister mtpRegister;
 	private Date createDate;
 	private Date updateDate;
 
@@ -70,11 +70,11 @@ public class MTPRegisterDetails {
 		this.fees = fees;
 	}
 	
-	public MTPRegister getMtpRegister() {
+	public DTOMtpRegister getMtpRegister() {
 		return mtpRegister;
 	}
 
-	public void setMtpRegister(MTPRegister mtpRegister) {
+	public void setMtpRegister(DTOMtpRegister mtpRegister) {
 		this.mtpRegister = mtpRegister;
 	}
 

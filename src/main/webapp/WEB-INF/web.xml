@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:web="http://java.sun.com/xml/ns/javaee" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>Navjeevan Hospital</display-name>
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
@@ -11,18 +11,48 @@
     <servlet-class>com.test.nav.controller.UserController</servlet-class>
   </servlet>
   <servlet>
-  	<description>
+    <description>
   	</description>
-  	<display-name>IndoorRegisterController</display-name>
-  	<servlet-name>IndoorRegisterController</servlet-name>
-  	<servlet-class>com.test.nav.controller.IndoorRegisterController</servlet-class>
+    <display-name>IndoorRegisterController</display-name>
+    <servlet-name>IndoorRegisterController</servlet-name>
+    <servlet-class>com.test.nav.controller.IndoorRegisterController</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>UserController</servlet-name>
     <url-pattern>/UserController</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>IndoorRegisterController</servlet-name>
-  	<url-pattern>/IndoorRegisterController</url-pattern>
+    <servlet-name>IndoorRegisterController</servlet-name>
+    <url-pattern>/IndoorRegisterController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>OTRegisterController</display-name>
+    <servlet-name>OTRegisterController</servlet-name>
+    <servlet-class>com.test.nav.controller.OTRegisterController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OTRegisterController</servlet-name>
+    <url-pattern>/OTRegisterController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>MTPRegisterController</display-name>
+    <servlet-name>MTPRegisterController</servlet-name>
+    <servlet-class>com.test.nav.controller.MTPRegisterController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MTPRegisterController</servlet-name>
+    <url-pattern>/MTPRegisterController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeliveryRegisterController</display-name>
+    <servlet-name>DeliveryRegisterController</servlet-name>
+    <servlet-class>com.test.nav.controller.DeliveryRegisterController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeliveryRegisterController</servlet-name>
+    <url-pattern>/DeliveryRegisterController</url-pattern>
   </servlet-mapping>
 </web-app>

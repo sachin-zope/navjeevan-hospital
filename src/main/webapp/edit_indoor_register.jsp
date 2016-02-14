@@ -110,7 +110,7 @@ $(document).ready(function () {
         	var doa = new Date($("#admitDate").val());
         	if(doa.getTime() > dod.getTime()) {
     			alert("Discharge date should be equal to or later than Admit Date");
-    			this.value = "";
+    			this.value = dod;
     		}
         }
         
@@ -148,6 +148,7 @@ $(document).ready(function () {
 		<div class="row">
 			<form class="form-horizontal" method="post"
 				action="IndoorRegisterController" id="indoorForm">
+				<input type="hidden" name="action" value = "edit"/>
 				<input type="hidden" name="id" value="<c:out value="${ir.id}" />"/>
 				<div class="form-group">
 					<label for="admitDate" class="col-sm-2 control-label">Admit

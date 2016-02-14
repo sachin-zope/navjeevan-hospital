@@ -2,7 +2,6 @@
 	pageEncoding="EUC-KR"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +10,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 	<title>Navjeevan Hospital</title>
+	
 	<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
@@ -19,28 +19,22 @@
 	<link href="https://cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" rel="stylesheet">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/common_styles.css" rel="stylesheet">
-
-	<script>
-		$(document).ready(function() {
-		    $('#example').DataTable({
-		    	"order" : []	
-		    });
-		} );
-	</script>
 </head>
 
 <body>
 	<jsp:include page="nav.html"></jsp:include>
+
 	<div class="container">
 		<div class="page-header">
-			<h3>Indoor Register Report</h3>
+			<h3>Delivery Register Report</h3>
 		</div>
+		
 		<div class="row" style="padding-bottom: 20px;">
 			<div class="col-sm-6">
 				<h4><%= session.getAttribute("REPORT_MONTH") %>, <%= session.getAttribute("REPORT_YEAR") %></h4>
 			</div>
 			<div class="col-sm-6" style="text-align: right;">
-				<form class="form-inline" action="IndoorRegisterController">
+				<form class="form-inline" action="DeliveryRegisterController">
 					<input type="hidden" name="action" value="report">
 					<div class="form-group">
 						<select name="month" class="form-control">
@@ -74,49 +68,37 @@
 				</form>
 			</div>
 		</div>
+		
 		<div class="row">
 			<div>
 				<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
 					<thead>
 						<tr>
-							<th>IPD No</th>
-							<th>Dates</th>
+							<th>Serial No</th>
+							<th>DOD</th>
 							<th>Name &amp; Address</th>
-							<th>Diagnosis</th>
-							<th>Treatment</th>
-							<th>Fees</th>
+							<th>Child Details</th>
+							<th>Diagnosis &amp; Treatment</th>
+							<th>Delivery Type</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${irs}" var="ir">
+						<c:forEach items="${drs}" var="dr">
 							<tr>
-								<td><c:out value="${ir.ipdNo}" /></td>
-								<td>DOA: <fmt:formatDate pattern="dd-MM-yyyy" value="${ir.admitDate}" /><br>
-								DOD: <fmt:formatDate pattern="dd-MM-yyyy" value="${ir.dischargeDate}" /></td>
-								<c:choose>
-									<c:when test="${ ir.treatment == 'MTP' }">
-										<td><c:out value="${ir.mtpSerialNo}" /></td>
-									</c:when>
-									<c:when test="${ ir.treatment == 'MTP + Abdominal Tubectomy' }">
-										<td><c:out value="${ir.mtpSerialNo}" /></td>
-									</c:when>
-									<c:when test="${ ir.treatment == 'MTP + Laparoscopic Tubectomy' }">
-										<td><c:out value="${ir.mtpSerialNo}" /></td>
-									</c:when>
-									<c:otherwise>
-										<td><c:out value="${ir.patientName}" /><br>
-										<c:out value="${ir.patientAddress}"/>&nbsp;&nbsp;&nbsp; &nbsp;
-										<c:out value="${ir.gender}"/>/<c:out value="${ir.age}"/></td>
-									</c:otherwise>
-								</c:choose>
-								
-								<td><c:out value="${ir.diagnosis}" /></td>
-								<td><c:out value="${ir.treatment}" /></td>
-								<td><c:out value="${ir.fees}" /></td>
-								<td><a href="IndoorRegisterController?action=edit&id=<c:out value="${ir.id}"/>">Edit</a>
-								 &nbsp; <a href="IndoorRegisterController?action=delete&id=<c:out value="${ir.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a></td>
-							</tr>
+								<td><c:out value="${dr.serialNo}" /></td>
+								<td><fmt:formatDate pattern="dd-MM-yyyy" value="${dr.deliveryDate}" /></td>
+								<td><c:out value="${dr.patientName}" /><br>
+											<c:out value="${dr.patientAddress}"/>&nbsp;&nbsp;&nbsp; &nbsp;
+											<c:out value="${dr.gender}"/>/<c:out value="${dr.age}"/></td>
+								<td>Time: <c:out value="${dr.birthTime}" /><br>
+									Weight: <c:out value="${dr.birthWeight}" /><br>
+									Sex: <c:out value="${dr.sexOfChild}" /></td>
+								<td><c:out value="${dr.diagnosis}" /><br><c:out value="${dr.treatment}" /></td>
+								<td><c:out value="${dr.deliveryType}" /></td>
+								<td><a href="DeliveryRegisterController?action=edit&id=<c:out value="${dr.id}"/>">Edit</a>
+									 &nbsp; <a href="DeliveryRegisterController?action=delete&id=<c:out value="${dr.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a></td>
+							 </tr>
 						</c:forEach>
 					</tbody>
 				</table>

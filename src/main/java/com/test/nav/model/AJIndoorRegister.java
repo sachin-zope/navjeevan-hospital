@@ -25,9 +25,18 @@ public class AJIndoorRegister extends Model{
 	public static final String CREATE_DATE = "create_date";
 	public static final String UPDATE_DATE = "update_date";
 	
-	public static String SELECT_BY_MONTH = "SELECT id, ipd_no, serial_no, admit_date, discharge_date, patient_name, "
+	public static String SELECT_BY_MONTH = "SELECT id, admit_date, discharge_date, patient_name, "
 			+ "gender, address, age, diagnosis, treatment, fees, remarks, delivery_register_id, ot_register_id, "
 			+ "mtp_register_id FROM indoor_register WHERE date_format(discharge_date, '%b') = ? and "
 			+ "date_format(discharge_date, '%Y') = ? order by discharge_date asc";
+	
+	public static String SELECT_FOR_DELIVERY_REPORT = "SELECT patient_name, gender, address, age, diagnosis, "
+			+ "treatment FROM indoor_register WHERE delivery_register_id = ?";
+	
+	public static String SELECT_FOR_MTP_REPORT = "SELECT patient_name, gender, address, age, diagnosis, "
+			+ "treatment FROM indoor_register WHERE mtp_register_id = ?";
+	
+	public static String SELECT_FOR_OT_REPORT = "SELECT patient_name, gender, address, age, diagnosis, "
+			+ "treatment FROM indoor_register WHERE ot_register_id = ?";
 
 }

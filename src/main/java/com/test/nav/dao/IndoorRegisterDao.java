@@ -32,7 +32,7 @@ public class IndoorRegisterDao {
 		}
 	}
 
-	public List<DTOIndoorRegister> getAllIndoorRegisters(String month, String year) {
+	public List<DTOIndoorRegister> getIndoorRegistersByMonth(String month, String year) {
 		Connection conn = null;
 		try {
 			conn = DbUtil.getConnection();
@@ -43,7 +43,7 @@ public class IndoorRegisterDao {
 			LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_BY_MONTH, month,
 					year);
 			System.out.println("Number of records found:" + ajIndoorRegisters.size());
-			return new IndoorRegisterTransformer().transformList(ajIndoorRegisters);
+			return new IndoorRegisterTransformer().transformList(ajIndoorRegisters, true);
 		} catch (Throwable t) {
 			t.printStackTrace();
 		} finally {
@@ -53,27 +53,26 @@ public class IndoorRegisterDao {
 		return null;
 	}
 	
-	public void updateIndoorRegister(DTOIndoorRegister register) {
+	public void update(DTOIndoorRegister register) {
 		Connection conn = null;
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			conn = DbUtil.getConnection();
 			conn.setReadOnly(false);
 			Base.openTransaction();
+			AJIndoorRegister irToUpdate = new AJIndoorRegister();
+			irToUpdate.setId(register.getId());
+			irToUpdate.setDate(AJIndoorRegister.ADMIT_DATE, register.getAdmitDate());
+			irToUpdate.setDate(AJIndoorRegister.DISCHARGE_DATE, register.getDischargeDate());
+			irToUpdate.setString(AJIndoorRegister.PATIENT_NAME, register.getPatientName());
+			irToUpdate.setString(AJIndoorRegister.PATIENT_ADDRESS, register.getPatientAddress());
+			irToUpdate.setInteger(AJIndoorRegister.AGE, register.getAge());
+			irToUpdate.setString(AJIndoorRegister.GENDER, register.getGender());
+			irToUpdate.setString(AJIndoorRegister.DIAGNOSIS, register.getDiagnosis());
+			irToUpdate.setDouble(AJIndoorRegister.FEES, register.getFees());
+			irToUpdate.setString(AJIndoorRegister.REMARKS, register.getRemarks());
 			
-			AJIndoorRegister ajIndoorRegister = AJIndoorRegister.findById(register.getId());
-			//if admit date is changed, generate ipdno again
-			if(!ajIndoorRegister.getDate(AJIndoorRegister.ADMIT_DATE).equals(register.getAdmitDate())) {
-				ajIndoorRegister.set(AJIndoorRegister.IPD_NO, generateIPDNo(register.getAdmitDate()));
-			}
-			
-			ajIndoorRegister.set(AJIndoorRegister.PATIENT_NAME, register.getPatientName());
-			ajIndoorRegister.set(AJIndoorRegister.PATIENT_ADDRESS, register.getPatientAddress());
-			ajIndoorRegister.set(AJIndoorRegister.AGE, register.getAge());
-			ajIndoorRegister.set(AJIndoorRegister.GENDER, register.getGender());
-			ajIndoorRegister.set(AJIndoorRegister.FEES, register.getFees());
-			ajIndoorRegister.set(AJIndoorRegister.REMARKS, register.getRemarks());
-			
+			irToUpdate.save();
+			Base.commitTransaction();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Base.rollbackTransaction();
@@ -81,7 +80,39 @@ public class IndoorRegisterDao {
 			Base.close();
 		}
 	}
-
+	
+	public void insert(DTOIndoorRegister dtoIndoorRegister) {
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+			conn.setReadOnly(false);
+			Base.openTransaction();
+			AJIndoorRegister irToInsert = new AJIndoorRegister();
+			irToInsert.setDate(AJIndoorRegister.ADMIT_DATE, dtoIndoorRegister.getAdmitDate());
+			irToInsert.setDate(AJIndoorRegister.DISCHARGE_DATE, dtoIndoorRegister.getDischargeDate());
+			irToInsert.setString(AJIndoorRegister.PATIENT_NAME, dtoIndoorRegister.getPatientName());
+			irToInsert.setString(AJIndoorRegister.PATIENT_ADDRESS, dtoIndoorRegister.getPatientAddress());
+			irToInsert.setInteger(AJIndoorRegister.AGE, dtoIndoorRegister.getAge());
+			irToInsert.setString(AJIndoorRegister.GENDER, dtoIndoorRegister.getGender());
+			irToInsert.setString(AJIndoorRegister.DIAGNOSIS, dtoIndoorRegister.getDiagnosis());
+			irToInsert.setString(AJIndoorRegister.TREATMENT, dtoIndoorRegister.getTreatment());
+			irToInsert.setDouble(AJIndoorRegister.FEES, dtoIndoorRegister.getFees());
+			irToInsert.setString(AJIndoorRegister.REMARKS, dtoIndoorRegister.getRemarks());
+			
+			irToInsert.setInteger(AJIndoorRegister.DELIVERY_REGISTER_ID, dtoIndoorRegister.getDeliveryRegisterId());
+			irToInsert.setInteger(AJIndoorRegister.OT_REGISTER_ID, dtoIndoorRegister.getOtRegisterId());
+			irToInsert.setInteger(AJIndoorRegister.MTP_REGISTER_ID, dtoIndoorRegister.getMtpRegisterId());
+			
+			irToInsert.save();
+			Base.commitTransaction();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			Base.rollbackTransaction();
+		} finally {
+			Base.close();
+		}
+	}
+	
 	public DTOIndoorRegister getIndoorRegisterById(int id) {
 		Connection conn = DbUtil.getConnection();
 		try {
@@ -130,6 +161,60 @@ public class IndoorRegisterDao {
 		}
 
 		return lastIPDNo;
+	}
+	
+	public AJIndoorRegister getIndoorRegisterForDeliveryReport(int deliveryRegisterId) {
+		Connection conn = DbUtil.getConnection();
+		try {
+			conn.setReadOnly(true);
+			Base.openTransaction();
+			LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_FOR_DELIVERY_REPORT, deliveryRegisterId);
+			if(!ajIndoorRegisters.isEmpty()) {
+				return ajIndoorRegisters.get(0);
+			}
+		} catch (Throwable t) {
+			t.printStackTrace();
+		} finally {
+			Base.close();
+		}
+
+		return null;
+	}
+	
+	public AJIndoorRegister getIndoorRegisterForMtpReport(int mtpRegisterId) {
+		Connection conn = DbUtil.getConnection();
+		try {
+			conn.setReadOnly(true);
+			Base.openTransaction();
+			LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_FOR_MTP_REPORT, mtpRegisterId);
+			if(!ajIndoorRegisters.isEmpty()) {
+				return ajIndoorRegisters.get(0);
+			}
+		} catch (Throwable t) {
+			t.printStackTrace();
+		} finally {
+			Base.close();
+		}
+
+		return null;
+	}
+	
+	public AJIndoorRegister getIndoorRegisterForOtReport(int otRegisterId) {
+		Connection conn = DbUtil.getConnection();
+		try {
+			conn.setReadOnly(true);
+			Base.openTransaction();
+			LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_FOR_OT_REPORT, otRegisterId);
+			if(!ajIndoorRegisters.isEmpty()) {
+				return ajIndoorRegisters.get(0);
+			}
+		} catch (Throwable t) {
+			t.printStackTrace();
+		} finally {
+			Base.close();
+		}
+
+		return null;
 	}
 }
 

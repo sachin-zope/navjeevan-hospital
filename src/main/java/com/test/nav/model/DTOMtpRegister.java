@@ -2,11 +2,10 @@ package com.test.nav.model;
 
 import java.util.Date;
 
-public class MTPRegister {
+public class DTOMtpRegister {
 
 	private int id;
 	private int mtpSerialNo;
-	private String gName;
 	private String religion;
 	private String married;
 	private String mindication;
@@ -22,6 +21,13 @@ public class MTPRegister {
 	private Date createDate;
 	private Date updateDate;
 	
+	private String patientName;
+	private String gender;
+	private String patientAddress;
+	private int age;
+	private String diagnosis;
+	private String treatment;
+	
 	public int getId() {
 		return id;
 	}
@@ -36,14 +42,6 @@ public class MTPRegister {
 
 	public void setMtpSerialNo(int mtpSerialNo) {
 		this.mtpSerialNo = mtpSerialNo;
-	}
-
-	public String getgName() {
-		return gName;
-	}
-
-	public void setgName(String gName) {
-		this.gName = gName;
 	}
 
 	public String getReligion() {
@@ -158,16 +156,62 @@ public class MTPRegister {
 		this.updateDate = updateDate;
 	}
 
+	public String getPatientName() {
+		return patientName;
+	}
+
+	public void setPatientName(String patientName) {
+		this.patientName = patientName;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getPatientAddress() {
+		return patientAddress;
+	}
+
+	public void setPatientAddress(String patientAddress) {
+		this.patientAddress = patientAddress;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getDiagnosis() {
+		return diagnosis;
+	}
+
+	public void setDiagnosis(String diagnosis) {
+		this.diagnosis = diagnosis;
+	}
+
+	public String getTreatment() {
+		return treatment;
+	}
+
+	public void setTreatment(String treatment) {
+		this.treatment = treatment;
+	}
+
 	@Override
 	public String toString() {
-		return "MTPRegister [id=" + id + ", mtpSerialNo=" + mtpSerialNo
-				+ ", gName=" + gName + ", religion=" + religion
-				+ ", mindication=" + mindication + ", procedure=" + procedure
-				+ ", batchNo=" + batchNo + ", durationOfPregnancy="
-				+ durationOfPregnancy + ", alongWith=" + alongWith
-				+ ", mChildrens=" + mChildrens + ", fChildrens=" + fChildrens
-				+ ", operationDate=" + operationDate + ", doneByDr=" + doneByDr
-				+ ", opinionGivenBy=" + opinionGivenBy + ", createDate="
-				+ createDate + ", updateDate=" + updateDate + "]";
+		return "DTOMtpRegister [id=" + id + ", mtpSerialNo=" + mtpSerialNo + ", religion=" + religion + ", married="
+				+ married + ", mindication=" + mindication + ", procedure=" + procedure + ", batchNo=" + batchNo
+				+ ", durationOfPregnancy=" + durationOfPregnancy + ", alongWith=" + alongWith + ", mChildrens=" + mChildrens
+				+ ", fChildrens=" + fChildrens + ", operationDate=" + operationDate + ", doneByDr=" + doneByDr
+				+ ", opinionGivenBy=" + opinionGivenBy + ", createDate=" + createDate + ", updateDate=" + updateDate
+				+ ", patientName=" + patientName + ", gender=" + gender + ", patientAddress=" + patientAddress + ", age=" + age
+				+ ", diagnosis=" + diagnosis + ", treatment=" + treatment + "]";
 	}
 }

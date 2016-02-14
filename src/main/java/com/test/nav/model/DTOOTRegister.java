@@ -2,16 +2,22 @@ package com.test.nav.model;
 
 import java.util.Date;
 
-public class OTRegister {
+public class DTOOTRegister {
 
 	private int id;
-	private Long serialNo;
 	private String nameOfSurgeon;
 	private String assistant;
 	private String anaesthetist;
 	private Date operationDate;
 	private Date createDate;
 	private Date updateDate;
+	
+	private String patientName;
+	private String gender;
+	private String patientAddress;
+	private int age;
+	private String diagnosis;
+	private String treatment;
 
 	public int getId() {
 		return id;
@@ -19,14 +25,6 @@ public class OTRegister {
 	
 	public void setId(int id) {
 		this.id = id;
-	}
-	
-	public Long getSerialNo() {
-		return serialNo;
-	}
-
-	public void setSerialNo(Long serialNo) {
-		this.serialNo = serialNo;
 	}
 
 	public String getNameOfSurgeon() {
@@ -79,9 +77,10 @@ public class OTRegister {
 
 	@Override
 	public String toString() {
-		return "OTRegister [id=" + id + ", serialNo= " + serialNo + ", nameOfSurgeon=" + nameOfSurgeon
-				+ ", assistant=" + assistant + ", anaesthetist=" + anaesthetist
-				+ ", createDate=" + createDate + ", updateDate=" + updateDate
-				+ "]";
+		return "DTOOTRegister [id=" + id + ", nameOfSurgeon=" + nameOfSurgeon + ", assistant=" + assistant
+				+ ", anaesthetist=" + anaesthetist + ", operationDate=" + operationDate + ", createDate=" + createDate
+				+ ", updateDate=" + updateDate + ", patientName=" + patientName + ", gender=" + gender + ", patientAddress="
+				+ patientAddress + ", age=" + age + ", diagnosis=" + diagnosis + ", treatment=" + treatment + "]";
 	}
+
 }

@@ -11,6 +11,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 	<title>Navjeevan Hospital</title>
+	
 	<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
@@ -31,16 +32,18 @@
 
 <body>
 	<jsp:include page="nav.html"></jsp:include>
+
 	<div class="container">
 		<div class="page-header">
-			<h3>Indoor Register Report</h3>
+			<h3>MTP Register Report</h3>
 		</div>
+		
 		<div class="row" style="padding-bottom: 20px;">
 			<div class="col-sm-6">
 				<h4><%= session.getAttribute("REPORT_MONTH") %>, <%= session.getAttribute("REPORT_YEAR") %></h4>
 			</div>
 			<div class="col-sm-6" style="text-align: right;">
-				<form class="form-inline" action="IndoorRegisterController">
+				<form class="form-inline" action="MTPRegisterController">
 					<input type="hidden" name="action" value="report">
 					<div class="form-group">
 						<select name="month" class="form-control">
@@ -74,48 +77,43 @@
 				</form>
 			</div>
 		</div>
+		
 		<div class="row">
 			<div>
-				<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+				<table class="table table-bordered">
 					<thead>
 						<tr>
-							<th>IPD No</th>
+							<th>Yearly No</th>
+							<th>Monthly No</th>
 							<th>Dates</th>
 							<th>Name &amp; Address</th>
-							<th>Diagnosis</th>
-							<th>Treatment</th>
-							<th>Fees</th>
+							<th>Weeks</th>
+							<th>Indication</th>
+							<th>Opinion given by</th>
+							<th>MTP done by</th>
+							<th>No of Children</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${irs}" var="ir">
+						<c:forEach items="${mtprs}" var="mtpr">
 							<tr>
-								<td><c:out value="${ir.ipdNo}" /></td>
-								<td>DOA: <fmt:formatDate pattern="dd-MM-yyyy" value="${ir.admitDate}" /><br>
-								DOD: <fmt:formatDate pattern="dd-MM-yyyy" value="${ir.dischargeDate}" /></td>
-								<c:choose>
-									<c:when test="${ ir.treatment == 'MTP' }">
-										<td><c:out value="${ir.mtpSerialNo}" /></td>
-									</c:when>
-									<c:when test="${ ir.treatment == 'MTP + Abdominal Tubectomy' }">
-										<td><c:out value="${ir.mtpSerialNo}" /></td>
-									</c:when>
-									<c:when test="${ ir.treatment == 'MTP + Laparoscopic Tubectomy' }">
-										<td><c:out value="${ir.mtpSerialNo}" /></td>
-									</c:when>
-									<c:otherwise>
-										<td><c:out value="${ir.patientName}" /><br>
-										<c:out value="${ir.patientAddress}"/>&nbsp;&nbsp;&nbsp; &nbsp;
-										<c:out value="${ir.gender}"/>/<c:out value="${ir.age}"/></td>
-									</c:otherwise>
-								</c:choose>
-								
-								<td><c:out value="${ir.diagnosis}" /></td>
-								<td><c:out value="${ir.treatment}" /></td>
-								<td><c:out value="${ir.fees}" /></td>
-								<td><a href="IndoorRegisterController?action=edit&id=<c:out value="${ir.id}"/>">Edit</a>
-								 &nbsp; <a href="IndoorRegisterController?action=delete&id=<c:out value="${ir.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a></td>
+								<td><c:out value="${mtpr.mtpSerialNo}" /></td>
+								<td><c:out value="${mtpr.monthlySerialNo}" /></td>
+								<td>DOA: <fmt:formatDate pattern="dd-MM-yyyy" value="${mtpr.admitDate}" /><br>
+									DOT: <fmt:formatDate pattern="dd-MM-yyyy" value="${mtpr.operationDate}" /><br>
+									DOD: <fmt:formatDate pattern="dd-MM-yyyy" value="${mtpr.dischargeDate}" /></td>
+								<td><c:out value="${mtpr.patientName}" /><br>
+											<c:out value="${mtpr.patientAddress}"/>&nbsp;&nbsp;&nbsp; &nbsp;
+											<c:out value="${mtpr.gender}"/>/<c:out value="${mtpr.age}"/></td>
+								<td><c:out value="${mtpr.durationOfPregnancy}" /></td>
+								<td><c:out value="${mtpr.mindication}" /></td>
+								<td><c:out value="${mtpr.opinionGivenBy}" /></td>
+								<td><c:out value="${mtpr.doneByDr}" /></td>
+								<td>M: <c:out value="${mtpr.mChildrens}" /><br>
+									F: <c:out value="${mtpr.fChildrens}" /></td>
+								<td><a href="MTPRegisterController?action=edit&id=<c:out value="${mtpr.id}"/>">Edit</a>
+								 &nbsp; <a href="MTPRegisterController?action=delete&id=<c:out value="${mtpr.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>

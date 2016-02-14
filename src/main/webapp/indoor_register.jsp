@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<%@page import="com.test.nav.model.DTOIndoorRegister"%>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -300,7 +299,7 @@ $(document).ready(function () {
 		</div>
 
 		<div class="row">
-			<form class="form-horizontal" method="post" action="indoorregisterservlet" id="indoorForm">
+			<form class="form-horizontal" method="post" action="IndoorRegisterController" id="indoorForm">
 			<input type="hidden" name="action" value="add">
 				<div class="form-group">
 					<label for="admitDate" class="col-sm-2 control-label">Admit
