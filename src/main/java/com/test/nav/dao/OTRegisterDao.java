@@ -4,9 +4,13 @@ import java.sql.Connection;
 import java.util.List;
 
 import org.javalite.activejdbc.Base;
+import org.javalite.activejdbc.LazyList;
 
+import com.test.nav.model.AJDeliveryRegister;
 import com.test.nav.model.AJOTRegister;
 import com.test.nav.model.DTOOTRegister;
+import com.test.nav.transformer.DeliveryRegisterTransformer;
+import com.test.nav.transformer.OTRegisterTransformer;
 import com.test.nav.util.DbUtil;
 
 public class OTRegisterDao {
@@ -57,7 +61,23 @@ public class OTRegisterDao {
 	}
 
 	public List<DTOOTRegister> getOTRegisterByMonth(String month, String year) {
-		// TODO Auto-generated method stub
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+			conn.setReadOnly(true);
+			Base.openTransaction();
+
+			System.out.println("request to fetch delivery register report");
+			LazyList<AJOTRegister> ajotRegisters = AJOTRegister.findBySQL(AJOTRegister.SELECT_BY_MONTH, month,
+					year);
+			System.out.println("Number of records found:" + ajotRegisters.size());
+			return new OTRegisterTransformer().transformList(ajotRegisters, true);
+		} catch (Throwable t) {
+			t.printStackTrace(); 
+		} finally {
+			Base.close();
+		}
+
 		return null;
 	}
 }

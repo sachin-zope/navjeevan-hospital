@@ -53,6 +53,7 @@ public class OTRegisterController extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("REPORT_MONTH", month);
 			session.setAttribute("REPORT_YEAR", year);
+			forward = REPORT;
 			request.setAttribute("otrs", otRegisterDao.getOTRegisterByMonth(month, year));
 		}
 		RequestDispatcher view = request.getRequestDispatcher(forward);
