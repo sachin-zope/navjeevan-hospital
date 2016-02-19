@@ -24,5 +24,8 @@ public class AJMtpRegister extends Model {
 	public static final String UPDATE_DATE = "update_date";
 	
 	public static final String SELECT_SERIAL_NO = "SELECT mtp_serial_no FROM mtp_register WHERE id = ?";
+	public static final String SELECT_BY_MONTH = "SELECT id, mtp_serial_no, operation_date, duration_of_pregnancy, "
+			+ "indication, male_childrens, female_childrens, done_by_dr, opinion_given_by FROM mtp_register WHERE "
+			+ "date_format(operation_date, '%b') = ? AND date_format(operation_date, '%Y') = ? order by operation_date asc";
 
 }

@@ -7,10 +7,8 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.LazyList;
 
 import com.test.nav.model.AJDeliveryRegister;
-import com.test.nav.model.AJIndoorRegister;
 import com.test.nav.model.DTODeliveryRegister;
 import com.test.nav.transformer.DeliveryRegisterTransformer;
-import com.test.nav.transformer.IndoorRegisterTransformer;
 import com.test.nav.util.DbUtil;
 
 public class DeliveryRegisterDao {

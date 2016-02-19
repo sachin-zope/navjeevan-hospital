@@ -18,7 +18,8 @@ import com.test.nav.util.AppUtil;
 public class DeliveryRegisterController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private DeliveryRegisterDao deliveryRegisterDao;
-
+	private static final String EDIT = "edit_delivery_register.jsp";
+	private static final String REPORT = "delivery_register_report.jsp";
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -32,9 +33,9 @@ public class DeliveryRegisterController extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String forward = "";
+		String forward = REPORT;
 		String action = request.getParameter("action");
-		System.out.println("action = " + action);
+		System.out.println("DeliveryRegisterController : action = " + action);
 
 		if (action.equalsIgnoreCase("report")) {
 			String month = request.getParameter("month");

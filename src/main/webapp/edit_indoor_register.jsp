@@ -13,12 +13,10 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <title>Navjeevan Hospital</title>
 
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script
-	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
-
-<link href="css/bootstrap.min.css" rel="stylesheet">
+	<script src="js/jquery-1.12.0.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	
+	<link href="css/bootstrap.min.css" rel="stylesheet">
 <style>
 #diagnosisOther {
 	display: none;

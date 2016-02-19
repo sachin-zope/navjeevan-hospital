@@ -11,14 +11,22 @@
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 	<title>Navjeevan Hospital</title>
 	
-	<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
+	<script src="js/jquery-1.12.0.min.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/dataTables.bootstrap.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	
-	<link href="https://cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" rel="stylesheet">
+	<link href="css/dataTables.bootstrap.min.css" rel="stylesheet">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/common_styles.css" rel="stylesheet">
+	
+	<script>
+		$(document).ready(function() {
+		    $('#example').DataTable({
+		    	"order" : []	
+		    });
+		} );
+	</script>
 </head>
 
 <body>

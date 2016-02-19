@@ -1,7 +1,6 @@
 package com.test.nav.dao;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,29 +11,30 @@ import org.javalite.activejdbc.LazyList;
 
 import com.test.nav.model.AJMtpRegister;
 import com.test.nav.model.DTOMtpRegister;
+import com.test.nav.transformer.MtpRegisterTransformer;
 import com.test.nav.util.AppUtil;
 import com.test.nav.util.DbUtil;
 
 public class MTPRegisterDao {
 
 	public int getMtpSerialNo(int mtpRegisterId) {
-		Connection conn = null;
+		//Connection conn = null;
 		int serialNo = 0;
-		try {
-			conn = DbUtil.getConnection();
-			conn.setReadOnly(true);
-			Base.openTransaction();
+		//try {
+		//	conn = DbUtil.getConnection();
+		//	conn.setReadOnly(true);
+		//	Base.openTransaction();
 			LazyList<AJMtpRegister> ajMtpRegisters = AJMtpRegister.findBySQL(AJMtpRegister.SELECT_SERIAL_NO, mtpRegisterId);
 			if (!ajMtpRegisters.isEmpty()) {
 				serialNo = ajMtpRegisters.get(0).getInteger(AJMtpRegister.MTP_SERIAL_NO);
 			}
-			Base.commitTransaction();
-		} catch (SQLException e) {
-			Base.rollbackTransaction();
-			e.printStackTrace();
-		} finally {
-			Base.close();
-		}
+		//	Base.commitTransaction();
+		//} catch (SQLException e) {
+		//	Base.rollbackTransaction();
+		//	e.printStackTrace();
+		//} finally {
+		//	Base.close();
+		//}
 		return serialNo;
 	}
 	
@@ -45,7 +45,7 @@ public class MTPRegisterDao {
 			conn.setReadOnly(false);
 			Base.openTransaction();
 			AJMtpRegister ajMtpRegister = new AJMtpRegister();
-			ajMtpRegister.setInteger(AJMtpRegister.MTP_SERIAL_NO, dtoMtpRegister.getMtpSerialNo());
+			ajMtpRegister.setInteger(AJMtpRegister.MTP_SERIAL_NO, generateSerialNo(dtoMtpRegister.getOperationDate()));
 			ajMtpRegister.setString(AJMtpRegister.RELIGION, dtoMtpRegister.getReligion());
 			ajMtpRegister.setString(AJMtpRegister.INDICATION, dtoMtpRegister.getMindication());
 			ajMtpRegister.setString(AJMtpRegister.MTP_PROCEDURE, dtoMtpRegister.getProcedure());
@@ -149,59 +149,42 @@ public class MTPRegisterDao {
 	}
 	
 	private Integer getLastSerialNo(Date operationDate) throws Exception{
-		Integer lastSerialNo = null;
-		Connection conn = null;
-		try {
-			conn = DbUtil.getConnection();
-			conn.setReadOnly(true);
-			Base.openTransaction();
-			
-			Object maxSerialNo = Base.firstCell("SELECT max(mtp_serial_no) from mtp_register where operation_date = STR_TO_DATE(?, '%d-%m-%Y)", operationDate);
+		Integer lastSerialNo = 0;
+		Object maxSerialNo = Base.firstCell("SELECT max(mtp_serial_no) from mtp_register where operation_date = ?", new SimpleDateFormat("yyyy-MM-dd").format(operationDate));
+		if (maxSerialNo != null) {
 			lastSerialNo = Integer.parseInt(maxSerialNo.toString());
-		} catch(Exception e) {
-			throw e;
-		} finally {
-			Base.close();
 		}
-
 		return lastSerialNo;
 	}
 	
-	public int checkForEmpty(int currentYear) {
+	private int checkForEmpty(int currentYear) {
 		Long resultCount = null;
-		Connection conn = null;
-		try {
-			conn = DbUtil.getConnection();
-			conn.setReadOnly(true);
-			Base.openTransaction();
-			resultCount = Base.count("mtp_register", "date_format(operationDate, '%Y') = :?", currentYear);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			Base.close();
-		}
-		
+		resultCount = Base.count("mtp_register", "date_format(operation_date, '%Y') = ?", currentYear);
 		return resultCount != null ? resultCount.intValue() : 0;
 	}
 	
 	private void updateSerialNoGreaterThanOperationDate(Date operationDate) {
-		Connection conn = null;
-		try {
-			conn = DbUtil.getConnection();
-			conn.setReadOnly(false);
-			Base.openTransaction();
-			AJMtpRegister.update("mtp_serial_no = mtp_serial_no + 1", "operation_date > ?", operationDate);
-			Base.commitTransaction();
-		} catch (Throwable t) {
-			Base.rollbackTransaction();
-			t.printStackTrace();
-		} finally {
-			Base.close();
-		}
+		AJMtpRegister.update("mtp_serial_no = mtp_serial_no + 1", "operation_date > ?", operationDate);
 	}
 
 	public List<DTOMtpRegister> getMtpRegisterByMonth(String month, String year) {
-		// TODO Auto-generated method stub
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+			conn.setReadOnly(true);
+			Base.openTransaction();
+
+			System.out.println("request to fetch mtp register report");
+			LazyList<AJMtpRegister> ajMtpRegisters = AJMtpRegister.findBySQL(AJMtpRegister.SELECT_BY_MONTH, month,
+					year);
+			System.out.println("Number of records found:" + ajMtpRegisters.size());
+			return new MtpRegisterTransformer().transformList(ajMtpRegisters);
+		} catch (Throwable t) {
+			t.printStackTrace(); 
+		} finally {
+			Base.close();
+		}
+
 		return null;
 	}		
 }

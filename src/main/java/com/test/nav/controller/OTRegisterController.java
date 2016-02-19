@@ -18,6 +18,8 @@ import com.test.nav.util.AppUtil;
 public class OTRegisterController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private OTRegisterDao otRegisterDao;
+	private static final String EDIT = "edit_ot_register.jsp";
+	private static final String REPORT = "ot_register_report.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()

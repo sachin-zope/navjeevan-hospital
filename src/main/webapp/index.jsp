@@ -6,6 +6,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<jsp:forward page="/IndoorRegisterController?action=report&month=Apr&year=2015" />
+<jsp:forward page="/IndoorRegisterController?action=report&type=complete" />
 </body>
 </html>

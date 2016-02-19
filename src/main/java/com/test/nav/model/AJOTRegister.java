@@ -14,4 +14,7 @@ public class AJOTRegister extends Model{
 	public static final String CREATE_DATE = "create_date";
 	public static final String UPDATE_DATE = "update_date";
 
+	public static final String SELECT_BY_MONTH = "SELECT id, name_of_surgeon, assistant, anaesthetist, "
+			+ "operation_date FROM ot_register WHERE "
+			+ "date_format(operation_date, '%b') = ? AND date_format(operation_date, '%Y') = ? order by operation_date asc";
 }

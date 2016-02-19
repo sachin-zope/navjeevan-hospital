@@ -25,7 +25,6 @@ public class IndoorRegisterTransformer {
 		int serialNo = 1;
 		for (AJIndoorRegister ajRegister : ajIndoorRegisters) {
 			DTOIndoorRegister register = transform(ajRegister); 
-			register.setIpdNo(1l);
 			register.setSerialNo(serialNo++);
 			Long ipdNo;
 			String key = ipdFormatter.format(ajRegister.getDate(AJIndoorRegister.ADMIT_DATE));

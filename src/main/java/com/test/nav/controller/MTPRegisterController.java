@@ -18,6 +18,8 @@ import com.test.nav.util.AppUtil;
 public class MTPRegisterController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private MTPRegisterDao mtpRegisterDao;
+	private static final String EDIT = "edit_mtp_register.jsp";
+	private static final String REPORT = "mtp_register_report.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -32,7 +34,7 @@ public class MTPRegisterController extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String forward = "";
+		String forward = REPORT;
 		String action = request.getParameter("action");
 		System.out.println("action = " + action);
 

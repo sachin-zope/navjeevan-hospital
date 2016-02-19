@@ -5,6 +5,7 @@ import java.util.Date;
 public class DTODeliveryRegister {
 	
 	private int id;
+	private Long serialNo;
 	private Date deliveryDate;
 	private String episiotomy;
 	private String deliveryType;
@@ -29,6 +30,14 @@ public class DTODeliveryRegister {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public Long getSerialNo() {
+		return serialNo;
+	}
+
+	public void setSerialNo(Long serialNo) {
+		this.serialNo = serialNo;
 	}
 
 	public Date getDeliveryDate() {

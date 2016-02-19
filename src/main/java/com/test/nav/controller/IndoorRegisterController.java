@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -30,6 +31,7 @@ public class IndoorRegisterController extends HttpServlet {
 	private static String INSERT = "/indoor_register.jsp";
 	private static String EDIT = "/edit_indoor_register.jsp";
 	private static String INDOOR_REPORT = "/indoor_register_report.jsp";
+	private static String INCOMPLETE_INDOOR_REPORT = "/incomplete_indoor_register_report.jsp";
 	private IndoorRegisterDao indoorRegisterDao;
 	private MTPRegisterDao mtpRegisterDao;
 	private DeliveryRegisterDao deliveryRegisterDao;
@@ -73,22 +75,34 @@ public class IndoorRegisterController extends HttpServlet {
 				DTOIndoorRegister ir = indoorRegisterDao.getIndoorRegisterById(id);
 				request.setAttribute("ir", ir);
 			} else if (action.equalsIgnoreCase("report")) {
-				forward = INDOOR_REPORT;
-				String month = request.getParameter("month");
-				String year = request.getParameter("year");
+				
+				String type = request.getParameter("type");
+				List<DTOIndoorRegister> indoorList = null;
+				if(type != null && !type.isEmpty()) {
+					if(type.equalsIgnoreCase("complete")) {
+						String month = request.getParameter("month");
+						String year = request.getParameter("year");
 
-				if (month == null || month.isEmpty()) {
-					month = AppUtil.getCurrentMonth();
-				}
+						if (month == null || month.isEmpty()) {
+							month = AppUtil.getCurrentMonth();
+						}
 
-				if (year == null || year.isEmpty()) {
-					year = AppUtil.getCurrentYear().toString();
+						if (year == null || year.isEmpty()) {
+							year = AppUtil.getCurrentYear().toString();
+						}
+						System.out.println("Month:" + month + " Year: " + year);
+						HttpSession session = request.getSession();
+						session.setAttribute("REPORT_MONTH", month);
+						session.setAttribute("REPORT_YEAR", year);
+						forward = INDOOR_REPORT;
+						indoorList = indoorRegisterDao.getIndoorRegistersByMonth(month, year);
+					} else if (type.equalsIgnoreCase("incomplete")) {
+						indoorList = indoorRegisterDao.getIncompleteIndoorRegister();
+						forward = INCOMPLETE_INDOOR_REPORT;
+					}
 				}
-				System.out.println("Month:" + month + " Year: " + year);
-				HttpSession session = request.getSession();
-				session.setAttribute("REPORT_MONTH", month);
-				session.setAttribute("REPORT_YEAR", year);
-				request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year));
+				
+				request.setAttribute("irs", indoorList);
 			} else {
 				forward = INSERT;
 			}
@@ -273,7 +287,6 @@ public class IndoorRegisterController extends HttpServlet {
 			operationDate = dateFormatter.parse(request.getParameter("MTmtpOperationDate"));
 			mtpRegister.setOperationDate(operationDate);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

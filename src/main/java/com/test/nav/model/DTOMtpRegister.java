@@ -6,6 +6,7 @@ public class DTOMtpRegister {
 
 	private int id;
 	private int mtpSerialNo;
+	private int monthlySerialNo;
 	private String religion;
 	private String married;
 	private String mindication;
@@ -21,6 +22,8 @@ public class DTOMtpRegister {
 	private Date createDate;
 	private Date updateDate;
 	
+	private Date admitDate;
+	private Date dischargeDate;
 	private String patientName;
 	private String gender;
 	private String patientAddress;
@@ -42,6 +45,14 @@ public class DTOMtpRegister {
 
 	public void setMtpSerialNo(int mtpSerialNo) {
 		this.mtpSerialNo = mtpSerialNo;
+	}
+	
+	public int getMonthlySerialNo() {
+		return monthlySerialNo;
+	}
+
+	public void setMonthlySerialNo(int monthlySerialNo) {
+		this.monthlySerialNo = monthlySerialNo;
 	}
 
 	public String getReligion() {
@@ -154,6 +165,22 @@ public class DTOMtpRegister {
 
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	public Date getAdmitDate() {
+		return admitDate;
+	}
+
+	public void setAdmitDate(Date admitDate) {
+		this.admitDate = admitDate;
+	}
+
+	public Date getDischargeDate() {
+		return dischargeDate;
+	}
+
+	public void setDischargeDate(Date dischargeDate) {
+		this.dischargeDate = dischargeDate;
 	}
 
 	public String getPatientName() {

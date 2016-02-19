@@ -164,50 +164,44 @@ public class IndoorRegisterDao {
 	}
 	
 	public AJIndoorRegister getIndoorRegisterForDeliveryReport(int deliveryRegisterId) {
-		Connection conn = DbUtil.getConnection();
-		try {
-			conn.setReadOnly(true);
-			Base.openTransaction();
-			LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_FOR_DELIVERY_REPORT, deliveryRegisterId);
-			if(!ajIndoorRegisters.isEmpty()) {
-				return ajIndoorRegisters.get(0);
-			}
-		} catch (Throwable t) {
-			t.printStackTrace();
-		} finally {
-			Base.close();
+		LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister
+				.findBySQL(AJIndoorRegister.SELECT_FOR_DELIVERY_REPORT,
+						deliveryRegisterId);
+		if (!ajIndoorRegisters.isEmpty()) {
+			return ajIndoorRegisters.get(0);
 		}
 
 		return null;
 	}
 	
 	public AJIndoorRegister getIndoorRegisterForMtpReport(int mtpRegisterId) {
-		Connection conn = DbUtil.getConnection();
-		try {
-			conn.setReadOnly(true);
-			Base.openTransaction();
-			LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_FOR_MTP_REPORT, mtpRegisterId);
-			if(!ajIndoorRegisters.isEmpty()) {
-				return ajIndoorRegisters.get(0);
-			}
-		} catch (Throwable t) {
-			t.printStackTrace();
-		} finally {
-			Base.close();
+		LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_FOR_MTP_REPORT, mtpRegisterId);
+		if(!ajIndoorRegisters.isEmpty()) {
+			return ajIndoorRegisters.get(0);
 		}
 
 		return null;
 	}
 	
 	public AJIndoorRegister getIndoorRegisterForOtReport(int otRegisterId) {
-		Connection conn = DbUtil.getConnection();
+		LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_FOR_OT_REPORT, otRegisterId);
+		if(!ajIndoorRegisters.isEmpty()) {
+			return ajIndoorRegisters.get(0);
+		}
+		return null;
+	}
+
+	public List<DTOIndoorRegister> getIncompleteIndoorRegister() {
+		Connection conn = null;
 		try {
+			conn = DbUtil.getConnection();
 			conn.setReadOnly(true);
 			Base.openTransaction();
-			LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_FOR_OT_REPORT, otRegisterId);
-			if(!ajIndoorRegisters.isEmpty()) {
-				return ajIndoorRegisters.get(0);
-			}
+
+			System.out.println("request to fetch incomplete indoor report");
+			LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_INCOMPLETE);
+			System.out.println("Number of records found:" + ajIndoorRegisters.size());
+			return new IndoorRegisterTransformer().transformList(ajIndoorRegisters, true);
 		} catch (Throwable t) {
 			t.printStackTrace();
 		} finally {

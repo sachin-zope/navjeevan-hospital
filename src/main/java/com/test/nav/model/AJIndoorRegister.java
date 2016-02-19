@@ -30,10 +30,14 @@ public class AJIndoorRegister extends Model{
 			+ "mtp_register_id FROM indoor_register WHERE date_format(discharge_date, '%b') = ? and "
 			+ "date_format(discharge_date, '%Y') = ? order by discharge_date asc";
 	
+	public static String SELECT_INCOMPLETE = "SELECT id, admit_date, discharge_date, patient_name, "
+			+ "gender, address, age, diagnosis, treatment, fees, remarks, delivery_register_id, ot_register_id, "
+			+ "mtp_register_id FROM indoor_register WHERE discharge_date = null";
+	
 	public static String SELECT_FOR_DELIVERY_REPORT = "SELECT patient_name, gender, address, age, diagnosis, "
 			+ "treatment FROM indoor_register WHERE delivery_register_id = ?";
 	
-	public static String SELECT_FOR_MTP_REPORT = "SELECT patient_name, gender, address, age, diagnosis, "
+	public static String SELECT_FOR_MTP_REPORT = "SELECT admit_date, discharge_date, patient_name, gender, address, age, diagnosis, "
 			+ "treatment FROM indoor_register WHERE mtp_register_id = ?";
 	
 	public static String SELECT_FOR_OT_REPORT = "SELECT patient_name, gender, address, age, diagnosis, "
