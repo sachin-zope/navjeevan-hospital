@@ -18,23 +18,11 @@ import com.test.nav.util.DbUtil;
 public class MTPRegisterDao {
 
 	public int getMtpSerialNo(int mtpRegisterId) {
-		//Connection conn = null;
 		int serialNo = 0;
-		//try {
-		//	conn = DbUtil.getConnection();
-		//	conn.setReadOnly(true);
-		//	Base.openTransaction();
-			LazyList<AJMtpRegister> ajMtpRegisters = AJMtpRegister.findBySQL(AJMtpRegister.SELECT_SERIAL_NO, mtpRegisterId);
-			if (!ajMtpRegisters.isEmpty()) {
-				serialNo = ajMtpRegisters.get(0).getInteger(AJMtpRegister.MTP_SERIAL_NO);
-			}
-		//	Base.commitTransaction();
-		//} catch (SQLException e) {
-		//	Base.rollbackTransaction();
-		//	e.printStackTrace();
-		//} finally {
-		//	Base.close();
-		//}
+		LazyList<AJMtpRegister> ajMtpRegisters = AJMtpRegister.findBySQL(AJMtpRegister.SELECT_SERIAL_NO, mtpRegisterId);
+		if (!ajMtpRegisters.isEmpty()) {
+			serialNo = ajMtpRegisters.get(0).getInteger(AJMtpRegister.MTP_SERIAL_NO);
+		}
 		return serialNo;
 	}
 	
@@ -181,6 +169,21 @@ public class MTPRegisterDao {
 			return new MtpRegisterTransformer().transformList(ajMtpRegisters);
 		} catch (Throwable t) {
 			t.printStackTrace(); 
+		} finally {
+			Base.close();
+		}
+
+		return null;
+	}
+
+	public DTOMtpRegister getMtpRegisterById(int id) {
+		Connection conn = DbUtil.getConnection();
+		try {
+			conn.setReadOnly(true);
+			Base.openTransaction();
+			return new MtpRegisterTransformer().transformForEdit((AJMtpRegister) AJMtpRegister.findById(id));
+		} catch (Throwable t) {
+			t.printStackTrace();
 		} finally {
 			Base.close();
 		}

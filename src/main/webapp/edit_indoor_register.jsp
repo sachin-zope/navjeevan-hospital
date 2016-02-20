@@ -68,6 +68,9 @@ function validate() {
 	$('#indoorForm').submit();
 };
 
+function goBack() {
+	window.history.back();
+};
 
 $(document).ready(function () {
 	
@@ -277,7 +280,7 @@ $(document).ready(function () {
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<button type="button" class="btn btn-success" onclick="validate()">Save</button>
-						<button type="button" class="btn btn-default">Cancel</button>
+						<button type="button" class="btn btn-default" onclick="goBack()">Cancel</button>
 					</div>
 				</div>
 			</form>

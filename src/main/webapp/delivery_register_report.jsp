@@ -104,8 +104,7 @@
 									Sex: <c:out value="${dr.sexOfChild}" /></td>
 								<td><c:out value="${dr.diagnosis}" /><br><c:out value="${dr.treatment}" /></td>
 								<td><c:out value="${dr.deliveryType}" /></td>
-								<td><a href="DeliveryRegisterController?action=edit&id=<c:out value="${dr.id}"/>">Edit</a>
-									 &nbsp; <a href="DeliveryRegisterController?action=delete&id=<c:out value="${dr.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a></td>
+								<td><a href="DeliveryRegisterController?action=edit&id=<c:out value="${dr.id}"/>">Edit</a></td>
 							 </tr>
 						</c:forEach>
 					</tbody>

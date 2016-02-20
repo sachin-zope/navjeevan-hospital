@@ -1,6 +1,9 @@
 package com.test.nav.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.test.nav.dao.OTRegisterDao;
+import com.test.nav.model.DTOOTRegister;
 import com.test.nav.util.AppUtil;
 
 /**
@@ -55,6 +59,11 @@ public class OTRegisterController extends HttpServlet {
 			session.setAttribute("REPORT_YEAR", year);
 			forward = REPORT;
 			request.setAttribute("otrs", otRegisterDao.getOTRegisterByMonth(month, year));
+		} else if (action.equalsIgnoreCase("edit")) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			System.out.println("request to edit ot register for id:" + id);
+			forward = EDIT;
+			request.setAttribute("otr", otRegisterDao.getOTRegisterById(id));
 		}
 		RequestDispatcher view = request.getRequestDispatcher(forward);
 		view.forward(request, response);
@@ -70,11 +79,38 @@ public class OTRegisterController extends HttpServlet {
 		System.out.println("action = " + action);
 		
 		if(action.equalsIgnoreCase("edit")) {
-			
+			int id = Integer.parseInt(request.getParameter("id"));
+			System.out.println("editing ot register for id:" + id);
+			DTOOTRegister dtootRegister = generateOTRegister(request);
+			dtootRegister.setId(id);
+			otRegisterDao.update(dtootRegister);
+			HttpSession session = request.getSession();
+			String month = session.getAttribute("REPORT_MONTH").toString();
+			String year = session.getAttribute("REPORT_YEAR").toString();
+			forward = REPORT;
+			request.setAttribute("otrs", otRegisterDao.getOTRegisterByMonth(month, year));
 		}
 		
 		RequestDispatcher view = request.getRequestDispatcher(forward);
 		view.forward(request, response);
+	}
+	
+	private DTOOTRegister generateOTRegister(HttpServletRequest request) {
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+		DTOOTRegister otRegister = new DTOOTRegister();
+		otRegister.setNameOfSurgeon(request.getParameter("NameOfSurgeon"));
+		otRegister.setAssistant(request.getParameter("assistant"));
+		otRegister.setAnaesthetist(request.getParameter("anaesthetist"));
+		String strOperationDate = request.getParameter("operationDate");
+		Date operationDate;
+		try {
+			operationDate = dateFormatter.parse(strOperationDate);
+			otRegister.setOperationDate(operationDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		System.out.println("formed ot register from request:" + otRegister.toString());
+		return otRegister;
 	}
 
 }

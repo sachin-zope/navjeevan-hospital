@@ -5,6 +5,7 @@ import java.util.Date;
 public class DTOOTRegister {
 
 	private int id;
+	private Long serialNo;
 	private String nameOfSurgeon;
 	private String assistant;
 	private String anaesthetist;
@@ -25,6 +26,14 @@ public class DTOOTRegister {
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public Long getSerialNo() {
+		return serialNo;
+	}
+
+	public void setSerialNo(Long serialNo) {
+		this.serialNo = serialNo;
 	}
 
 	public String getNameOfSurgeon() {
@@ -73,6 +82,54 @@ public class DTOOTRegister {
 	
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+	
+	public String getPatientName() {
+		return patientName;
+	}
+
+	public void setPatientName(String patientName) {
+		this.patientName = patientName;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getPatientAddress() {
+		return patientAddress;
+	}
+
+	public void setPatientAddress(String patientAddress) {
+		this.patientAddress = patientAddress;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getDiagnosis() {
+		return diagnosis;
+	}
+
+	public void setDiagnosis(String diagnosis) {
+		this.diagnosis = diagnosis;
+	}
+
+	public String getTreatment() {
+		return treatment;
+	}
+
+	public void setTreatment(String treatment) {
+		this.treatment = treatment;
 	}
 
 	@Override

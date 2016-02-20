@@ -1,6 +1,9 @@
 package com.test.nav.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.test.nav.dao.MTPRegisterDao;
+import com.test.nav.model.DTOMtpRegister;
 import com.test.nav.util.AppUtil;
 
 /**
@@ -54,6 +58,11 @@ public class MTPRegisterController extends HttpServlet {
 			session.setAttribute("REPORT_MONTH", month);
 			session.setAttribute("REPORT_YEAR", year);
 			request.setAttribute("mtprs", mtpRegisterDao.getMtpRegisterByMonth(month, year));
+		} else if (action.equalsIgnoreCase("edit")) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			System.out.println("request to edit ot register for id:" + id);
+			forward = EDIT;
+			request.setAttribute("mtpr", mtpRegisterDao.getMtpRegisterById(id));
 		}
 		RequestDispatcher view = request.getRequestDispatcher(forward);
 		view.forward(request, response);
@@ -69,10 +78,51 @@ public class MTPRegisterController extends HttpServlet {
 		System.out.println("action = " + action);
 
 		if(action.equalsIgnoreCase("edit")) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			System.out.println("editing mtp register for id:" + id);
+			DTOMtpRegister mtpRegister = generateMTPRegister(request);
+			mtpRegister.setId(id);
+			mtpRegisterDao.update(mtpRegister);
+			HttpSession session = request.getSession();
+			String month = session.getAttribute("REPORT_MONTH").toString();
+			String year = session.getAttribute("REPORT_YEAR").toString();
+			forward = REPORT;
+			request.setAttribute("mtprs", mtpRegisterDao.getMtpRegisterByMonth(month, year));
 			
 		}
 		RequestDispatcher view = request.getRequestDispatcher(forward);
 		view.forward(request, response);
+	}
+	
+	private DTOMtpRegister generateMTPRegister(HttpServletRequest request) {
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+		DTOMtpRegister mtpRegister = new DTOMtpRegister();
+		mtpRegister.setDurationOfPregnancy(Integer.parseInt(request.getParameter("durationOfPregnancy")));
+		mtpRegister.setReligion(request.getParameter("religion"));
+		mtpRegister.setMarried(request.getParameter("married"));
+		mtpRegister.setMindication(request.getParameter("mindication"));
+		mtpRegister.setProcedure(request.getParameter("procedure"));
+		mtpRegister.setAlongWith(request.getParameter("alongWith"));
+		String strMChildrens = request.getParameter("mChildrens"); 
+		int mChildrens =  (strMChildrens != null && strMChildrens.length() > 0 ) ? Integer.parseInt(strMChildrens) : 0;  
+		mtpRegister.setmChildrens(mChildrens);
+		
+		String strFChildrens = request.getParameter("fChildrens");
+		int fChildrens = (strFChildrens != null && strFChildrens.length() > 0 ? Integer.parseInt(strFChildrens) : 0);
+		mtpRegister.setfChildrens(fChildrens);
+		
+		mtpRegister.setDoneByDr(request.getParameter("doneby"));
+		mtpRegister.setOpinionGivenBy(request.getParameter("opinionby"));
+		
+		Date operationDate;
+		try {
+			operationDate = dateFormatter.parse(request.getParameter("mtpOperationDate"));
+			mtpRegister.setOperationDate(operationDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return mtpRegister;
 	}
 
 }

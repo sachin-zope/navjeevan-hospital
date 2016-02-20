@@ -104,8 +104,7 @@
 								<td><c:out value="${otr.nameOfSurgeon}" /></td>
 								<td><c:out value="${otr.anaesthetist}" /></td>
 								<td><c:out value="${otr.assistant}" /></td>
-								<td><a href="OTRegisterController?action=edit&id=<c:out value="${otr.id}"/>">Edit</a>
-								 &nbsp; <a href="OTRegisterController?action=delete&id=<c:out value="${otr.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a></td>
+								<td><a href="OTRegisterController?action=edit&id=<c:out value="${otr.id}"/>">Edit</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>

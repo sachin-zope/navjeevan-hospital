@@ -434,8 +434,8 @@ $(document).ready(function () {
 						<label for="religion" class="col-sm-2 control-label">Religion</label>
 						<div class="col-sm-3">
 							<select name="religion" class="form-control">
-								<option value="hindu">Hindu</option>
-								<option value="muslim">Muslim</option>
+								<option value="Hindu">Hindu</option>
+								<option value="Muslim">Muslim</option>
 								<option value="Shikh">Shikh</option>
 							</select>
 						</div>
@@ -541,8 +541,8 @@ $(document).ready(function () {
 						<label for="MTreligion" class="col-sm-2 control-label">Religion</label>
 						<div class="col-sm-3">
 							<select name="MTreligion" class="form-control">
-								<option value="hindu">Hindu</option>
-								<option value="muslim">Muslim</option>
+								<option value="Hindu">Hindu</option>
+								<option value="Muslim">Muslim</option>
 								<option value="Shikh">Shikh</option>
 							</select>
 						</div>

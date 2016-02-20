@@ -360,7 +360,10 @@ public class IndoorRegisterController extends HttpServlet {
 		}
 		try {
 			ir.setAdmitDate(dateFormatter.parse(request.getParameter("admitDate")));
-			ir.setDischargeDate(dateFormatter.parse(request.getParameter("dischargeDate")));
+			String strDischargeDate = request.getParameter("dischargeDate");
+			if(strDischargeDate != null && !strDischargeDate.isEmpty()) {
+				ir.setDischargeDate(dateFormatter.parse(strDischargeDate));
+			}
 		} catch(ParseException pe) {
 			System.out.println("error in parsing discharge date");
 		}

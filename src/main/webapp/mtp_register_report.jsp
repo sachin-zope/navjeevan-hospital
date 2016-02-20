@@ -113,8 +113,7 @@
 								<td><c:out value="${mtpr.doneByDr}" /></td>
 								<td>M: <c:out value="${mtpr.mChildrens}" /><br>
 									F: <c:out value="${mtpr.fChildrens}" /></td>
-								<td><a href="MTPRegisterController?action=edit&id=<c:out value="${mtpr.id}"/>">Edit</a>
-								 &nbsp; <a href="MTPRegisterController?action=delete&id=<c:out value="${mtpr.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a></td>
+								<td><a href="MTPRegisterController?action=edit&id=<c:out value="${mtpr.id}"/>">Edit</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>

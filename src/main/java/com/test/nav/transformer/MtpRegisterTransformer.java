@@ -1,6 +1,7 @@
 package com.test.nav.transformer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.javalite.activejdbc.LazyList;
@@ -52,9 +53,27 @@ public class MtpRegisterTransformer {
 		dtoMtpRegister.setOperationDate(ajMtpRegister.getDate(AJMtpRegister.OPERATION_DATE));
 		dtoMtpRegister.setDoneByDr(ajMtpRegister.getString(AJMtpRegister.DONE_BY_DR));
 		dtoMtpRegister.setOpinionGivenBy(ajMtpRegister.getString(AJMtpRegister.OPINION_GIVEN_BY));
-		
 		return dtoMtpRegister;
 	}
 
+	public DTOMtpRegister transformForEdit(AJMtpRegister ajMtpRegister) {
+		DTOMtpRegister dtoMtpRegister = new DTOMtpRegister();
+		dtoMtpRegister.setId(ajMtpRegister.getInteger(AJMtpRegister.ID));
+		dtoMtpRegister.setMtpSerialNo(ajMtpRegister.getInteger(AJMtpRegister.MTP_SERIAL_NO));
+		dtoMtpRegister.setMindication(ajMtpRegister.getString(AJMtpRegister.INDICATION));
+		dtoMtpRegister.setBatchNo(ajMtpRegister.getString(AJMtpRegister.BATCH_NO));
+		dtoMtpRegister.setDurationOfPregnancy(ajMtpRegister.getInteger(AJMtpRegister.DURATION_OF_PREGNANCY));
+		dtoMtpRegister.setmChildrens(ajMtpRegister.getInteger(AJMtpRegister.MALE_CHILDRENS));
+		dtoMtpRegister.setfChildrens(ajMtpRegister.getInteger(AJMtpRegister.FEMALE_CHILDRENS));
+		dtoMtpRegister.setOperationDate(ajMtpRegister.getDate(AJMtpRegister.OPERATION_DATE));
+		dtoMtpRegister.setDoneByDr(ajMtpRegister.getString(AJMtpRegister.DONE_BY_DR));
+		dtoMtpRegister.setOpinionGivenBy(ajMtpRegister.getString(AJMtpRegister.OPINION_GIVEN_BY));
+		dtoMtpRegister.setReligion(ajMtpRegister.getString(AJMtpRegister.RELIGION));
+		dtoMtpRegister.setMarried(ajMtpRegister.getString(AJMtpRegister.MARRIED));
+		dtoMtpRegister.setProcedure(ajMtpRegister.getString(AJMtpRegister.MTP_PROCEDURE));
+		dtoMtpRegister.setAlongWith(ajMtpRegister.getString(AJMtpRegister.ALONG_WITH));
+		System.out.println(dtoMtpRegister.toString());
+		return dtoMtpRegister;
+	}
 	
 }

@@ -86,4 +86,19 @@ public class DeliveryRegisterDao {
 
 		return null;
 	}
+
+	public DTODeliveryRegister getDeliveryRegisterById(int id) {
+		Connection conn = DbUtil.getConnection();
+		try {
+			conn.setReadOnly(true);
+			Base.openTransaction();
+			return new DeliveryRegisterTransformer().transformForEdit((AJDeliveryRegister) AJDeliveryRegister.findById(id));
+		} catch (Throwable t) {
+			t.printStackTrace();
+		} finally {
+			Base.close();
+		}
+
+		return null;
+	}
 }
