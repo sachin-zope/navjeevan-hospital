@@ -97,7 +97,7 @@
 							<tr>
 								<td><c:out value="${otr.serialNo}" /></td>
 								<td><fmt:formatDate pattern="dd-MM-yyyy" value="${otr.operationDate}" /></td>
-								<td><c:choose>
+								<c:choose>
 									<c:when test="${ otr.treatment == 'MTP' }">
 										<td><c:out value="${otr.mtpSerialNo}" /></td>
 									</c:when>
@@ -115,7 +115,7 @@
 										<c:out value="${otr.patientAddress}"/>&nbsp;&nbsp;&nbsp; &nbsp;
 										<c:out value="${otr.gender}"/>/<c:out value="${otr.age}"/></td>
 									</c:otherwise>
-								</c:choose></td>
+								</c:choose>
 											
 								<td><c:out value="${otr.diagnosis}" /><br><c:out value="${otr.treatment}" /></td>
 								<td><c:out value="${otr.nameOfSurgeon}" /></td>

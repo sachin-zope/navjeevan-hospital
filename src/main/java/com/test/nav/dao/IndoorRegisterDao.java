@@ -9,7 +9,10 @@ import java.util.List;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.LazyList;
 
+import com.test.nav.model.AJDeliveryRegister;
 import com.test.nav.model.AJIndoorRegister;
+import com.test.nav.model.AJMtpRegister;
+import com.test.nav.model.AJOTRegister;
 import com.test.nav.model.DTODeliveryRegister;
 import com.test.nav.model.DTOIndoorRegister;
 import com.test.nav.model.DTOMtpRegister;
@@ -25,7 +28,27 @@ public class IndoorRegisterDao {
 			conn = DbUtil.getConnection();
 			conn.setReadOnly(false);
 			Base.openTransaction();
-			AJIndoorRegister.delete("id = ?", id);
+			AJIndoorRegister irToDelete = AJIndoorRegister.findById(id);
+			if(irToDelete != null) {
+				Integer mtpRegId = irToDelete.getInteger(AJIndoorRegister.MTP_REGISTER_ID);
+				if(mtpRegId != null && mtpRegId > 0) {
+					System.out.println("deleting mtp register with id:" + mtpRegId);
+					AJMtpRegister.delete("id = ?", mtpRegId);
+				}
+				
+				Integer deliveryRegId = irToDelete.getInteger(AJIndoorRegister.DELIVERY_REGISTER_ID);
+				if(deliveryRegId != null && deliveryRegId > 0) {
+					System.out.println("deleting delivery register with id:" + deliveryRegId);
+					AJDeliveryRegister.delete("id = ?", deliveryRegId);
+				}
+				
+				Integer otRegId = irToDelete.getInteger(AJIndoorRegister.OT_REGISTER_ID);
+				if(otRegId !=  null && otRegId > 0) {
+					System.out.println("deleting ot register with id:" + otRegId);
+					AJOTRegister.delete("id = ?", otRegId);
+				}
+				irToDelete.delete();
+			}
 			Base.commitTransaction();
 		} catch (SQLException e) {
 			Base.rollbackTransaction();

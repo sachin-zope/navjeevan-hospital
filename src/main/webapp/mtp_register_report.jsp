@@ -112,9 +112,12 @@
 									Method: <c:out value="${mtpr.procedure}" /><br>
 									With: <c:out value="${mtpr.alongWith}" />
 									<c:choose>
-										<c:when test="${mtpr.batchNo != null }">
-											<br>BatchNo: <c:out value="${mtpr.batchNo}" />
+										<c:when test="${empty mtpr.batchNo}">
+											&nbsp;
 										</c:when>
+										<c:otherwise>
+											<br>BatchNo: <c:out value="${mtpr.batchNo}" />
+										</c:otherwise>
 									</c:choose>
 									
 								</td>
