@@ -14,30 +14,17 @@ import com.test.nav.util.DbUtil;
 public class DeliveryRegisterDao {
 
 	public int insert(DTODeliveryRegister dtoDeliveryRegister) {
-		Connection conn = null;
-		try {
-			conn = DbUtil.getConnection();
-			conn.setReadOnly(false);
-			Base.openTransaction();
-			AJDeliveryRegister ajDeliveryRegister = new AJDeliveryRegister();
-			ajDeliveryRegister.setDate(AJDeliveryRegister.DELIVERY_DATE, dtoDeliveryRegister.getDeliveryDate());
-			ajDeliveryRegister.setString(AJDeliveryRegister.EPISIOTOMY, dtoDeliveryRegister.getEpisiotomy());
-			ajDeliveryRegister.setString(AJDeliveryRegister.DELIVERY_TYPE, dtoDeliveryRegister.getDeliveryType());
-			ajDeliveryRegister.setString(AJDeliveryRegister.SEX_OF_CHILD, dtoDeliveryRegister.getSexOfChild());
-			ajDeliveryRegister.setString(AJDeliveryRegister.BIRTH_WEIGHT, dtoDeliveryRegister.getBirthWeight());
-			ajDeliveryRegister.setString(AJDeliveryRegister.BIRTH_TIME, dtoDeliveryRegister.getBirthTime());
-			ajDeliveryRegister.setString(AJDeliveryRegister.INDICATION, dtoDeliveryRegister.getIndication());
-			ajDeliveryRegister.setString(AJDeliveryRegister.REMARKS, dtoDeliveryRegister.getDeliveryRemarks());
-			ajDeliveryRegister.save();
-			Base.commitTransaction();
-			return Integer.parseInt(ajDeliveryRegister.getId().toString());
-		} catch (Throwable t) {
-			Base.rollbackTransaction();
-			t.printStackTrace();
-		} finally {
-			Base.close();
-		}
-		return 0;
+		AJDeliveryRegister ajDeliveryRegister = new AJDeliveryRegister();
+		ajDeliveryRegister.setDate(AJDeliveryRegister.DELIVERY_DATE, dtoDeliveryRegister.getDeliveryDate());
+		ajDeliveryRegister.setString(AJDeliveryRegister.EPISIOTOMY, dtoDeliveryRegister.getEpisiotomy());
+		ajDeliveryRegister.setString(AJDeliveryRegister.DELIVERY_TYPE, dtoDeliveryRegister.getDeliveryType());
+		ajDeliveryRegister.setString(AJDeliveryRegister.SEX_OF_CHILD, dtoDeliveryRegister.getSexOfChild());
+		ajDeliveryRegister.setString(AJDeliveryRegister.BIRTH_WEIGHT, dtoDeliveryRegister.getBirthWeight());
+		ajDeliveryRegister.setString(AJDeliveryRegister.BIRTH_TIME, dtoDeliveryRegister.getBirthTime());
+		ajDeliveryRegister.setString(AJDeliveryRegister.INDICATION, dtoDeliveryRegister.getIndication());
+		ajDeliveryRegister.setString(AJDeliveryRegister.REMARKS, dtoDeliveryRegister.getDeliveryRemarks());
+		ajDeliveryRegister.save();
+		return Integer.parseInt(ajDeliveryRegister.getId().toString());
 	}
 	
 	public void update(DTODeliveryRegister dtoDeliveryRegister) {

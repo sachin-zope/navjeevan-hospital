@@ -10,7 +10,7 @@ public class DTOMtpRegisterDetails {
 	private int age;
 	private String remarks;
 	private double fees;
-	private DTOMtpRegister mtpRegister;
+	private int mtpRegisterId;
 	private Date createDate;
 	private Date updateDate;
 
@@ -70,12 +70,12 @@ public class DTOMtpRegisterDetails {
 		this.fees = fees;
 	}
 	
-	public DTOMtpRegister getMtpRegister() {
-		return mtpRegister;
+	public int getMtpRegisterId() {
+		return mtpRegisterId;
 	}
 
-	public void setMtpRegister(DTOMtpRegister mtpRegister) {
-		this.mtpRegister = mtpRegister;
+	public void setMtpRegisterId(int mtpRegisterId) {
+		this.mtpRegisterId = mtpRegisterId;
 	}
 
 	public Date getCreateDate() {

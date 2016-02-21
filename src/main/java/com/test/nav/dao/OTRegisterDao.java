@@ -13,27 +13,14 @@ import com.test.nav.util.DbUtil;
 
 public class OTRegisterDao {
 	
-	public int insert (DTOOTRegister dtootRegister) {
-		Connection conn = null;
-		try {
-			conn = DbUtil.getConnection();
-			conn.setReadOnly(false);
-			Base.openTransaction();
-			AJOTRegister ajotRegister = new AJOTRegister();
-			ajotRegister.setString(AJOTRegister.NAME_OF_SURGEON, dtootRegister.getNameOfSurgeon());
-			ajotRegister.setString(AJOTRegister.ASSISTANT, dtootRegister.getAssistant());
-			ajotRegister.setString(AJOTRegister.ANAESTHETIST, dtootRegister.getAnaesthetist());
-			ajotRegister.setDate(AJOTRegister.OPERATION_DATE, dtootRegister.getOperationDate());
-			ajotRegister.save();
-			Base.commitTransaction();
-			return Integer.parseInt(ajotRegister.getId().toString());
-		} catch (Throwable t) {
-			Base.rollbackTransaction();
-			t.printStackTrace();
-		} finally {
-			Base.close();
-		}
-		return 0;
+	public int insert(DTOOTRegister dtootRegister) {
+		AJOTRegister ajotRegister = new AJOTRegister();
+		ajotRegister.setString(AJOTRegister.NAME_OF_SURGEON, dtootRegister.getNameOfSurgeon());
+		ajotRegister.setString(AJOTRegister.ASSISTANT, dtootRegister.getAssistant());
+		ajotRegister.setString(AJOTRegister.ANAESTHETIST, dtootRegister.getAnaesthetist());
+		ajotRegister.setDate(AJOTRegister.OPERATION_DATE, dtootRegister.getOperationDate());
+		ajotRegister.save();
+		return Integer.parseInt(ajotRegister.getId().toString());
 	}
 	
 	public void update (DTOOTRegister dtootRegister) {

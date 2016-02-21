@@ -10,7 +10,10 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.LazyList;
 
 import com.test.nav.model.AJIndoorRegister;
+import com.test.nav.model.DTODeliveryRegister;
 import com.test.nav.model.DTOIndoorRegister;
+import com.test.nav.model.DTOMtpRegister;
+import com.test.nav.model.DTOOTRegister;
 import com.test.nav.transformer.IndoorRegisterTransformer;
 import com.test.nav.util.DbUtil;
 
@@ -81,12 +84,121 @@ public class IndoorRegisterDao {
 		}
 	}
 	
-	public void insert(DTOIndoorRegister dtoIndoorRegister) {
+	public void insertWithMtpAndOTRegister(DTOIndoorRegister dtoIndoorRegister, DTOMtpRegister dtoMtpRegister, DTOOTRegister dtootRegister) {
 		Connection conn = null;
 		try {
 			conn = DbUtil.getConnection();
 			conn.setReadOnly(false);
 			Base.openTransaction();
+			MTPRegisterDao mtpRegisterDao = new MTPRegisterDao();
+			
+			int mtpId = mtpRegisterDao.insert(dtoMtpRegister);
+			dtoIndoorRegister.setMtpRegisterId(mtpId);
+			System.out.println("MTP register id inserted:" + mtpId);
+			
+			OTRegisterDao otRegisterDao = new OTRegisterDao();
+			dtootRegister.setOperationDate(dtoMtpRegister.getOperationDate());
+			int otId = otRegisterDao.insert(dtootRegister);
+			System.out.println("OT register id inserted:" + otId);
+			dtoIndoorRegister.setOtRegisterId(otId);
+			
+			insert(dtoIndoorRegister);
+			Base.commitTransaction();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			Base.rollbackTransaction();
+		} finally {
+			Base.close();
+		}
+	}
+	
+	public void insertWithOTRegister(DTOIndoorRegister dtoIndoorRegister, DTOOTRegister dtootRegister) {
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+			conn.setReadOnly(false);
+			Base.openTransaction();
+			OTRegisterDao otRegisterDao = new OTRegisterDao();
+			int otId = otRegisterDao.insert(dtootRegister);
+			System.out.println("OT register id inserted:" + otId);
+			dtoIndoorRegister.setOtRegisterId(otId);
+			insert(dtoIndoorRegister);
+			Base.commitTransaction();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			Base.rollbackTransaction();
+		} finally {
+			Base.close();
+		}
+	}
+	
+	public void insertWithDeliveryAndOTRegister(DTOIndoorRegister dtoIndoorRegister, DTODeliveryRegister deliveryRegister, DTOOTRegister dtootRegister) {
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+			conn.setReadOnly(false);
+			Base.openTransaction();
+			DeliveryRegisterDao deliveryRegisterDao = new DeliveryRegisterDao();
+			int id = deliveryRegisterDao.insert(deliveryRegister);
+			dtoIndoorRegister.setDeliveryRegisterId(id);
+			System.out.println("Delivery register id inserted:" + id);
+			
+			OTRegisterDao otRegisterDao = new OTRegisterDao();
+			dtootRegister.setOperationDate(deliveryRegister.getDeliveryDate());
+			int otId = otRegisterDao.insert(dtootRegister);
+			System.out.println("OT register id inserted:" + otId);
+			dtoIndoorRegister.setOtRegisterId(otId);
+			insert(dtoIndoorRegister);
+			Base.commitTransaction();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			Base.rollbackTransaction();
+		} finally {
+			Base.close();
+		}
+	}
+	
+	public void insertWithDeliveryRegister(DTOIndoorRegister dtoIndoorRegister, DTODeliveryRegister deliveryRegister) {
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+			conn.setReadOnly(false);
+			Base.openTransaction();
+			DeliveryRegisterDao deliveryRegisterDao = new DeliveryRegisterDao();
+			int id = deliveryRegisterDao.insert(deliveryRegister);
+			dtoIndoorRegister.setDeliveryRegisterId(id);
+			System.out.println("Delivery register id inserted:" + id);
+			insert(dtoIndoorRegister);
+			Base.commitTransaction();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			Base.rollbackTransaction();
+		} finally {
+			Base.close();
+		}
+	}
+	
+	public void insertWithMtpRegister(DTOIndoorRegister dtoIndoorRegister, DTOMtpRegister dtoMtpRegister) {
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+			conn.setReadOnly(false);
+			Base.openTransaction();
+			MTPRegisterDao mtpRegisterDao = new MTPRegisterDao();
+			int id = mtpRegisterDao.insert(dtoMtpRegister);
+			System.out.println("MTP register id inserted:" + id);
+			dtoIndoorRegister.setMtpRegisterId(id);
+			insert(dtoIndoorRegister);
+			Base.commitTransaction();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			Base.rollbackTransaction();
+		} finally {
+			Base.close();
+		}
+	}
+	
+	public void insert(DTOIndoorRegister dtoIndoorRegister) {
 			AJIndoorRegister irToInsert = new AJIndoorRegister();
 			irToInsert.setDate(AJIndoorRegister.ADMIT_DATE, dtoIndoorRegister.getAdmitDate());
 			irToInsert.setDate(AJIndoorRegister.DISCHARGE_DATE, dtoIndoorRegister.getDischargeDate());
@@ -100,17 +212,13 @@ public class IndoorRegisterDao {
 			irToInsert.setString(AJIndoorRegister.REMARKS, dtoIndoorRegister.getRemarks());
 			
 			irToInsert.setInteger(AJIndoorRegister.DELIVERY_REGISTER_ID, dtoIndoorRegister.getDeliveryRegisterId());
-			irToInsert.setInteger(AJIndoorRegister.OT_REGISTER_ID, dtoIndoorRegister.getOtRegisterId());
+			if(dtoIndoorRegister.getOtRegisterId() > 0) {
+				irToInsert.setInteger(AJIndoorRegister.OT_REGISTER_ID, dtoIndoorRegister.getOtRegisterId());
+			}
 			irToInsert.setInteger(AJIndoorRegister.MTP_REGISTER_ID, dtoIndoorRegister.getMtpRegisterId());
 			
 			irToInsert.save();
-			Base.commitTransaction();
-		} catch (Throwable t) {
-			t.printStackTrace();
-			Base.rollbackTransaction();
-		} finally {
-			Base.close();
-		}
+			
 	}
 	
 	public DTOIndoorRegister getIndoorRegisterById(int id) {

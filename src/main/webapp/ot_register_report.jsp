@@ -97,9 +97,26 @@
 							<tr>
 								<td><c:out value="${otr.serialNo}" /></td>
 								<td><fmt:formatDate pattern="dd-MM-yyyy" value="${otr.operationDate}" /></td>
-								<td><c:out value="${otr.patientName}" /><br>
-											<c:out value="${otr.patientAddress}"/>&nbsp;&nbsp;&nbsp; &nbsp;
-											<c:out value="${otr.gender}"/>/<c:out value="${otr.age}"/></td>
+								<td><c:choose>
+									<c:when test="${ otr.treatment == 'MTP' }">
+										<td><c:out value="${otr.mtpSerialNo}" /></td>
+									</c:when>
+									<c:when test="${ otr.treatment == 'MTP + Tubectomy' }">
+										<td><c:out value="${otr.mtpSerialNo}" /></td>
+									</c:when>
+									<c:when test="${ otr.treatment == 'MTP + Abdominal Tubectomy' }">
+										<td><c:out value="${otr.mtpSerialNo}" /></td>
+									</c:when>
+									<c:when test="${ otr.treatment == 'MTP + Laparoscopic Tubectomy' }">
+										<td><c:out value="${otr.mtpSerialNo}" /></td>
+									</c:when>
+									<c:otherwise>
+										<td><c:out value="${otr.patientName}" /><br>
+										<c:out value="${otr.patientAddress}"/>&nbsp;&nbsp;&nbsp; &nbsp;
+										<c:out value="${otr.gender}"/>/<c:out value="${otr.age}"/></td>
+									</c:otherwise>
+								</c:choose></td>
+											
 								<td><c:out value="${otr.diagnosis}" /><br><c:out value="${otr.treatment}" /></td>
 								<td><c:out value="${otr.nameOfSurgeon}" /></td>
 								<td><c:out value="${otr.anaesthetist}" /></td>

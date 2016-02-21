@@ -41,20 +41,22 @@ public class DeliveryRegisterTransformer {
 			}
 			deliveryRegister.setSerialNo(serialNo);
 			AJIndoorRegister ajIndoorRegister = irDao.getIndoorRegisterForDeliveryReport(deliveryRegister.getId());
-			deliveryRegister.setPatientName(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_NAME));
-			deliveryRegister.setPatientAddress(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_ADDRESS));
-			deliveryRegister.setAge(ajIndoorRegister.getInteger(AJIndoorRegister.AGE));
-			deliveryRegister.setDiagnosis(ajIndoorRegister.getString(AJIndoorRegister.DIAGNOSIS));
-			deliveryRegister.setTreatment(ajIndoorRegister.getString(AJIndoorRegister.TREATMENT));
-			if (ajIndoorRegister.getString(AJIndoorRegister.GENDER).equalsIgnoreCase("male")) {
-				deliveryRegister.setGender("M");
-			} else if (ajIndoorRegister.getString(AJIndoorRegister.GENDER).equalsIgnoreCase("female")) {
-				deliveryRegister.setGender("F");
-			} else {
-				deliveryRegister.setGender("");
+			if(ajIndoorRegister != null) {
+				deliveryRegister.setPatientName(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_NAME));
+				deliveryRegister.setPatientAddress(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_ADDRESS));
+				deliveryRegister.setAge(ajIndoorRegister.getInteger(AJIndoorRegister.AGE));
+				deliveryRegister.setDiagnosis(ajIndoorRegister.getString(AJIndoorRegister.DIAGNOSIS));
+				deliveryRegister.setTreatment(ajIndoorRegister.getString(AJIndoorRegister.TREATMENT));
+				if (ajIndoorRegister.getString(AJIndoorRegister.GENDER).equalsIgnoreCase("male")) {
+					deliveryRegister.setGender("M");
+				} else if (ajIndoorRegister.getString(AJIndoorRegister.GENDER).equalsIgnoreCase("female")) {
+					deliveryRegister.setGender("F");
+				} else {
+					deliveryRegister.setGender("");
+				}
+				
+				deliveryRegisters.add(deliveryRegister);
 			}
-			
-			deliveryRegisters.add(deliveryRegister);
 		}
 		return deliveryRegisters;
 	}

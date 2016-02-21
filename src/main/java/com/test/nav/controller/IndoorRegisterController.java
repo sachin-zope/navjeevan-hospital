@@ -13,10 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.test.nav.dao.DeliveryRegisterDao;
 import com.test.nav.dao.IndoorRegisterDao;
-import com.test.nav.dao.MTPRegisterDao;
-import com.test.nav.dao.OTRegisterDao;
 import com.test.nav.model.DTODeliveryRegister;
 import com.test.nav.model.DTOIndoorRegister;
 import com.test.nav.model.DTOMtpRegister;
@@ -33,9 +30,6 @@ public class IndoorRegisterController extends HttpServlet {
 	private static String INDOOR_REPORT = "/indoor_register_report.jsp";
 	private static String INCOMPLETE_INDOOR_REPORT = "/incomplete_indoor_register_report.jsp";
 	private IndoorRegisterDao indoorRegisterDao;
-	private MTPRegisterDao mtpRegisterDao;
-	private DeliveryRegisterDao deliveryRegisterDao;
-	private OTRegisterDao otRegisterDao;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -43,9 +37,6 @@ public class IndoorRegisterController extends HttpServlet {
 	public IndoorRegisterController() {
 		super();
 		indoorRegisterDao = new IndoorRegisterDao();
-		mtpRegisterDao = new MTPRegisterDao();
-		deliveryRegisterDao = new DeliveryRegisterDao();
-		otRegisterDao = new OTRegisterDao();
 	}
 
 	/**
@@ -55,8 +46,8 @@ public class IndoorRegisterController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String forward = "";
 		String action = request.getParameter("action");
-		System.out.println("action = " + action);
-		
+		System.out.println("get action = " + action);
+
 		if (action != null && !action.isEmpty()) {
 			if (action.equalsIgnoreCase("delete")) {
 				int id = Integer.parseInt(request.getParameter("id"));
@@ -66,20 +57,21 @@ public class IndoorRegisterController extends HttpServlet {
 				HttpSession session = request.getSession();
 				String month = session.getAttribute("REPORT_MONTH").toString();
 				String year = session.getAttribute("REPORT_YEAR").toString();
-				request.setAttribute("irs", indoorRegisterDao
-						.getIndoorRegistersByMonth(month, year));
+				request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year));
 			} else if (action.equalsIgnoreCase("edit")) {
 				forward = EDIT;
 				int id = Integer.parseInt(request.getParameter("id"));
 				System.out.println("request to edit indoor register for id:" + id);
 				DTOIndoorRegister ir = indoorRegisterDao.getIndoorRegisterById(id);
+				HttpSession session = request.getSession();
+				session.setAttribute("FROM", request.getParameter("from"));
 				request.setAttribute("ir", ir);
 			} else if (action.equalsIgnoreCase("report")) {
-				
+
 				String type = request.getParameter("type");
 				List<DTOIndoorRegister> indoorList = null;
-				if(type != null && !type.isEmpty()) {
-					if(type.equalsIgnoreCase("complete")) {
+				if (type != null && !type.isEmpty()) {
+					if (type.equalsIgnoreCase("complete")) {
 						String month = request.getParameter("month");
 						String year = request.getParameter("year");
 
@@ -101,7 +93,7 @@ public class IndoorRegisterController extends HttpServlet {
 						forward = INCOMPLETE_INDOOR_REPORT;
 					}
 				}
-				
+
 				request.setAttribute("irs", indoorList);
 			} else {
 				forward = INSERT;
@@ -125,61 +117,39 @@ public class IndoorRegisterController extends HttpServlet {
 			String forward = "";
 			String action = request.getParameter("action");
 			System.out.println("action = " + action);
-			
+
 			DTOIndoorRegister ir = generateIndoorRegister(request);
 
 			if (action.equalsIgnoreCase("add")) {
 				String treatment = request.getParameter("treatment");
-				if(treatment.equalsIgnoreCase("other")){
+				if (treatment.equalsIgnoreCase("other")) {
 					ir.setTreatment(request.getParameter("OtherTreatment"));
 				} else {
 					ir.setTreatment(treatment);
 				}
-				
+
 				if (treatment.equalsIgnoreCase("mtp")) {
 					DTOMtpRegister mtpRegister = generateMTPRegister(request);
-					int id = mtpRegisterDao.insert(mtpRegister);
-					System.out.println("MTP register id inserted:" + id);
-					ir.setMtpRegisterId(id);
-				} else if (treatment.equalsIgnoreCase("mtp + abdominal tubectomy") || treatment.equalsIgnoreCase("mtp + laparoscopic tubectomy")) { 
+					indoorRegisterDao.insertWithMtpRegister(ir, mtpRegister);
+				} else if (treatment.equalsIgnoreCase("mtp + abdominal tubectomy")
+						|| treatment.equalsIgnoreCase("mtp + laparoscopic tubectomy")) {
 					DTOMtpRegister mtpRegister = generateMTPRegisterForTubectomy(request);
-					int mtpId = mtpRegisterDao.insert(mtpRegister);
-					ir.setMtpRegisterId(mtpId);
-					System.out.println("MTP register id inserted:" + mtpId);
-					
 					DTOOTRegister otRegister = generateOTRegisterForTubectomy(request);
-					otRegister.setOperationDate(mtpRegister.getOperationDate());
-					int otId = otRegisterDao.insert(otRegister);
-					System.out.println("OT register id inserted:" + otId);
-					ir.setOtRegisterId(otId);
+					indoorRegisterDao.insertWithMtpAndOTRegister(ir, mtpRegister, otRegister);
 				} else if (treatment.equalsIgnoreCase("delivery")) {
 					DTODeliveryRegister deliveryRegister = generateDeliveryRegister(request);
-					int id = deliveryRegisterDao.insert(deliveryRegister);
-					ir.setDeliveryRegisterId(id);
-					System.out.println("Delivery register id inserted:" + id);
-				} else if(treatment.equalsIgnoreCase("lscs") || treatment.equalsIgnoreCase("LSCS with Tubectomy")) {
+					indoorRegisterDao.insertWithDeliveryRegister(ir, deliveryRegister);
+				} else if (treatment.equalsIgnoreCase("lscs") || treatment.equalsIgnoreCase("LSCS with Tubectomy")) {
 					DTODeliveryRegister deliveryRegister = generateDeliveryRegisterForLSCS(request);
-					int id = deliveryRegisterDao.insert(deliveryRegister);
-					ir.setDeliveryRegisterId(id);
-					System.out.println("delivery register id inserted:" + id);
-					
 					DTOOTRegister otRegister = generateOTRegisterForLSCS(request);
-					otRegister.setOperationDate(deliveryRegister.getDeliveryDate());
-					int otId = otRegisterDao.insert(otRegister);
-					ir.setOtRegisterId(otId);
-					System.out.println("OT register id inserted:" + otId);
+					indoorRegisterDao.insertWithDeliveryAndOTRegister(ir, deliveryRegister, otRegister);
 				} else if (treatment.equalsIgnoreCase("other")) {
 					DTOOTRegister dtootRegister = generateOTRegister(request);
-					int otId = otRegisterDao.insert(dtootRegister);
-					ir.setOtRegisterId(otId);
-					System.out.println("OT register id inserted:" + otId);
+					indoorRegisterDao.insertWithOTRegister(ir, dtootRegister);
 				} else {
 					DTOOTRegister dtootRegister = generateOTRegister(request);
-					int otId = otRegisterDao.insert(dtootRegister);
-					ir.setOtRegisterId(otId);
-					System.out.println("ot register id inserted:" + otId);
+					indoorRegisterDao.insertWithOTRegister(ir, dtootRegister);
 				}
-				indoorRegisterDao.insert(ir);
 				forward = INSERT;
 				request.setAttribute("RESP", "success");
 			} else if (action.equalsIgnoreCase("edit")) {
@@ -187,17 +157,32 @@ public class IndoorRegisterController extends HttpServlet {
 				HttpSession session = request.getSession();
 				String month = session.getAttribute("REPORT_MONTH").toString();
 				String year = session.getAttribute("REPORT_YEAR").toString();
-				request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year));
-				forward = INDOOR_REPORT;
+				
+				String from = session.getAttribute("FROM") != null ? session.getAttribute("FROM").toString() : null;
+				if(from == null) {
+					forward = INDOOR_REPORT;
+					request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year));
+				} else if (from.equalsIgnoreCase("complete")) {
+					forward = INDOOR_REPORT;
+					request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year));
+				} else {
+					forward = INCOMPLETE_INDOOR_REPORT;
+					request.setAttribute("irs", indoorRegisterDao.getIncompleteIndoorRegister());
+				}
+				System.out.println("From: " + from);
 			}
-			
+
 			RequestDispatcher view = request.getRequestDispatcher(forward);
 			view.forward(request, response);
 		} catch (Throwable t) {
 			t.printStackTrace();
+			request.setAttribute("RESP", "error");
+			request.setAttribute("ERROR", "Record Not Inserted, please try again!");
+			RequestDispatcher view = request.getRequestDispatcher(INSERT);
+			view.forward(request, response);
 		}
 	}
-	
+
 	private DTOOTRegister generateOTRegisterForLSCS(HttpServletRequest request) {
 		DTOOTRegister otRegister = new DTOOTRegister();
 		otRegister.setNameOfSurgeon(request.getParameter("NameOfSurgeonForLSCS"));
@@ -208,11 +193,11 @@ public class IndoorRegisterController extends HttpServlet {
 
 	private DTODeliveryRegister generateDeliveryRegisterForLSCS(HttpServletRequest request) {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-		DTODeliveryRegister deliveryRegister = new DTODeliveryRegister(); 
-		
+		DTODeliveryRegister deliveryRegister = new DTODeliveryRegister();
+
 		try {
 			String deliveryDate = request.getParameter("deliveryDateForLSCS");
-			if(deliveryDate != null && !deliveryDate.isEmpty()) {
+			if (deliveryDate != null && !deliveryDate.isEmpty()) {
 				deliveryRegister.setDeliveryDate(dateFormatter.parse(deliveryDate));
 			}
 		} catch (ParseException e) {
@@ -225,7 +210,7 @@ public class IndoorRegisterController extends HttpServlet {
 		deliveryRegister.setBirthWeight(Double.valueOf(request.getParameter("birthWeightForLSCS")));
 		deliveryRegister.setBirthTime(request.getParameter("birthTimeForLSCS"));
 		String indication = request.getParameter("indicationForLSCS");
-		if(indication != null && indication.equalsIgnoreCase("other")) {
+		if (indication != null && indication.equalsIgnoreCase("other")) {
 			deliveryRegister.setIndication(request.getParameter("otherIndicationForLSCS"));
 		} else {
 			deliveryRegister.setIndication(indication);
@@ -236,12 +221,12 @@ public class IndoorRegisterController extends HttpServlet {
 
 	private DTODeliveryRegister generateDeliveryRegister(HttpServletRequest request) {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-		DTODeliveryRegister deliveryRegister = new DTODeliveryRegister(); 
-		
+		DTODeliveryRegister deliveryRegister = new DTODeliveryRegister();
+
 		try {
 			String deliveryDate = request.getParameter("deliveryDate");
-			if(deliveryDate != null && !deliveryDate.isEmpty())
-			deliveryRegister.setDeliveryDate(dateFormatter.parse(deliveryDate));
+			if (deliveryDate != null && !deliveryDate.isEmpty())
+				deliveryRegister.setDeliveryDate(dateFormatter.parse(deliveryDate));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -252,13 +237,13 @@ public class IndoorRegisterController extends HttpServlet {
 		deliveryRegister.setBirthWeight(Double.valueOf(request.getParameter("birthWeight")));
 		deliveryRegister.setBirthTime(request.getParameter("birthTime"));
 		String indication = request.getParameter("indication");
-		if(indication != null && indication.equalsIgnoreCase("other")) {
+		if (indication != null && indication.equalsIgnoreCase("other")) {
 			deliveryRegister.setIndication(request.getParameter("otherIndication"));
 		} else {
 			deliveryRegister.setIndication(indication);
 		}
 		deliveryRegister.setDeliveryRemarks(request.getParameter("deliveryRemarks"));
-		
+
 		return deliveryRegister;
 	}
 
@@ -271,17 +256,17 @@ public class IndoorRegisterController extends HttpServlet {
 		mtpRegister.setMindication(request.getParameter("MTmindication"));
 		mtpRegister.setProcedure(request.getParameter("MTprocedure"));
 		mtpRegister.setAlongWith(request.getParameter("MTalongWith"));
-		String strMChildrens = request.getParameter("MTmChildrens"); 
-		int mChildrens =  (strMChildrens != null && strMChildrens.length() > 0 ) ? Integer.parseInt(strMChildrens) : 0;  
+		String strMChildrens = request.getParameter("MTmChildrens");
+		int mChildrens = (strMChildrens != null && strMChildrens.length() > 0) ? Integer.parseInt(strMChildrens) : 0;
 		mtpRegister.setmChildrens(mChildrens);
-		
+
 		String strFChildrens = request.getParameter("MTfChildrens");
 		int fChildrens = (strFChildrens != null && strFChildrens.length() > 0 ? Integer.parseInt(strFChildrens) : 0);
 		mtpRegister.setfChildrens(fChildrens);
-		
+
 		mtpRegister.setDoneByDr(request.getParameter("MTdoneby"));
 		mtpRegister.setOpinionGivenBy(request.getParameter("MTopinionby"));
-		
+
 		Date operationDate;
 		try {
 			operationDate = dateFormatter.parse(request.getParameter("MTmtpOperationDate"));
@@ -289,7 +274,7 @@ public class IndoorRegisterController extends HttpServlet {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return mtpRegister;
 	}
 
@@ -310,17 +295,17 @@ public class IndoorRegisterController extends HttpServlet {
 		mtpRegister.setMindication(request.getParameter("mindication"));
 		mtpRegister.setProcedure(request.getParameter("procedure"));
 		mtpRegister.setAlongWith(request.getParameter("alongWith"));
-		String strMChildrens = request.getParameter("mChildrens"); 
-		int mChildrens =  (strMChildrens != null && strMChildrens.length() > 0 ) ? Integer.parseInt(strMChildrens) : 0;  
+		String strMChildrens = request.getParameter("mChildrens");
+		int mChildrens = (strMChildrens != null && strMChildrens.length() > 0) ? Integer.parseInt(strMChildrens) : 0;
 		mtpRegister.setmChildrens(mChildrens);
-		
+
 		String strFChildrens = request.getParameter("fChildrens");
 		int fChildrens = (strFChildrens != null && strFChildrens.length() > 0 ? Integer.parseInt(strFChildrens) : 0);
 		mtpRegister.setfChildrens(fChildrens);
-		
+
 		mtpRegister.setDoneByDr(request.getParameter("doneby"));
 		mtpRegister.setOpinionGivenBy(request.getParameter("opinionby"));
-		
+
 		Date operationDate;
 		try {
 			operationDate = dateFormatter.parse(request.getParameter("mtpOperationDate"));
@@ -328,7 +313,7 @@ public class IndoorRegisterController extends HttpServlet {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return mtpRegister;
 	}
 
@@ -346,14 +331,14 @@ public class IndoorRegisterController extends HttpServlet {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return otRegister;
 	}
 
 	private DTOIndoorRegister generateIndoorRegister(HttpServletRequest request) {
 		DTOIndoorRegister ir = new DTOIndoorRegister();
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-		
+
 		String id = request.getParameter("id");
 		if (id != null && !id.isEmpty()) {
 			ir.setId(Integer.parseInt(id));
@@ -361,31 +346,31 @@ public class IndoorRegisterController extends HttpServlet {
 		try {
 			ir.setAdmitDate(dateFormatter.parse(request.getParameter("admitDate")));
 			String strDischargeDate = request.getParameter("dischargeDate");
-			if(strDischargeDate != null && !strDischargeDate.isEmpty()) {
+			if (strDischargeDate != null && !strDischargeDate.isEmpty()) {
 				ir.setDischargeDate(dateFormatter.parse(strDischargeDate));
 			}
-		} catch(ParseException pe) {
+		} catch (ParseException pe) {
 			System.out.println("error in parsing discharge date");
 		}
 		ir.setPatientName(request.getParameter("pName"));
 		ir.setGender(request.getParameter("gender"));
 		ir.setPatientAddress(request.getParameter("pAddress"));
 		ir.setAge(Integer.parseInt(request.getParameter("age")));
-		
+
 		String diagnosis = request.getParameter("diagnosis");
-		if(diagnosis.equalsIgnoreCase("other")){
+		if (diagnosis.equalsIgnoreCase("other")) {
 			ir.setDiagnosis(request.getParameter("OtherDiagnosis"));
 		} else {
 			ir.setDiagnosis(diagnosis);
 		}
-		
+
 		ir.setRemarks(request.getParameter("remarks"));
-		
+
 		String fees = request.getParameter("fees");
-		if(fees != null && fees.length() > 0) {
+		if (fees != null && fees.length() > 0) {
 			ir.setFees(Double.valueOf(fees));
 		}
-		
+
 		return ir;
 	}
 }

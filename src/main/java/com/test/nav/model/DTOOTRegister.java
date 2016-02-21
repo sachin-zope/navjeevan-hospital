@@ -19,6 +19,7 @@ public class DTOOTRegister {
 	private int age;
 	private String diagnosis;
 	private String treatment;
+	private String mtpSerialNo;
 
 	public int getId() {
 		return id;
@@ -130,6 +131,14 @@ public class DTOOTRegister {
 
 	public void setTreatment(String treatment) {
 		this.treatment = treatment;
+	}
+	
+	public String getMtpSerialNo() {
+		return mtpSerialNo;
+	}
+
+	public void setMtpSerialNo(String mtpSerialNo) {
+		this.mtpSerialNo = mtpSerialNo;
 	}
 
 	@Override

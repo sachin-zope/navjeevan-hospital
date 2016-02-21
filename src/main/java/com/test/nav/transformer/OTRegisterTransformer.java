@@ -11,6 +11,7 @@ import org.javalite.activejdbc.LazyList;
 
 import com.test.nav.dao.IndoorRegisterDao;
 import com.test.nav.model.AJIndoorRegister;
+import com.test.nav.model.AJMtpRegister;
 import com.test.nav.model.AJOTRegister;
 import com.test.nav.model.DTOOTRegister;
 
@@ -40,19 +41,30 @@ public class OTRegisterTransformer {
 			}
 			dtootRegister.setSerialNo(serialNo);
 			AJIndoorRegister ajIndoorRegister = irDao.getIndoorRegisterForOtReport(dtootRegister.getId());
-			dtootRegister.setPatientName(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_NAME));
-			dtootRegister.setPatientAddress(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_ADDRESS));
-			dtootRegister.setAge(ajIndoorRegister.getInteger(AJIndoorRegister.AGE));
-			dtootRegister.setDiagnosis(ajIndoorRegister.getString(AJIndoorRegister.DIAGNOSIS));
-			dtootRegister.setTreatment(ajIndoorRegister.getString(AJIndoorRegister.TREATMENT));
-			if (ajIndoorRegister.getString(AJIndoorRegister.GENDER).equalsIgnoreCase("male")) {
-				dtootRegister.setGender("M");
-			} else if (ajIndoorRegister.getString(AJIndoorRegister.GENDER).equalsIgnoreCase("female")) {
-				dtootRegister.setGender("F");
-			} else {
-				dtootRegister.setGender("");
+			if(ajIndoorRegister != null) {
+				dtootRegister.setPatientName(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_NAME));
+				dtootRegister.setPatientAddress(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_ADDRESS));
+				dtootRegister.setAge(ajIndoorRegister.getInteger(AJIndoorRegister.AGE));
+				dtootRegister.setDiagnosis(ajIndoorRegister.getString(AJIndoorRegister.DIAGNOSIS));
+				String treatment = ajIndoorRegister.getString(AJIndoorRegister.TREATMENT);
+				dtootRegister.setTreatment(treatment);
+				if (treatment.contains("MTP")) {
+					int mtpRegisterId = ajIndoorRegister.getInteger(AJIndoorRegister.MTP_REGISTER_ID);
+					LazyList<AJMtpRegister> mtpRegister = AJMtpRegister.findBySQL("select mtp_serial_no from mtp_register where id = ?", mtpRegisterId);
+					if(!mtpRegister.isEmpty()) {
+						dtootRegister.setMtpSerialNo(""+mtpRegister.get(0).getInteger(AJMtpRegister.MTP_SERIAL_NO));
+					}
+				}
+				
+				if (ajIndoorRegister.getString(AJIndoorRegister.GENDER).equalsIgnoreCase("male")) {
+					dtootRegister.setGender("M");
+				} else if (ajIndoorRegister.getString(AJIndoorRegister.GENDER).equalsIgnoreCase("female")) {
+					dtootRegister.setGender("F");
+				} else {
+					dtootRegister.setGender("");
+				}
+				otrs.add(dtootRegister);
 			}
-			otrs.add(dtootRegister);
 		}
 		return otrs;
 	}

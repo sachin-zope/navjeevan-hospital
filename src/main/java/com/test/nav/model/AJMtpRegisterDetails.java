@@ -16,5 +16,7 @@ public class AJMtpRegisterDetails extends Model{
 	public static final String REMARKS = "remarks";
 	public static final String CREATE_DATE = "create_date";
 	public static final String UPDATE_DATE = "update_date";
+	
+	public static final String SELECT = "SELECT id, mtp_register_id, patient_name, address, gender, age from mtp_register_details where mtp_register_id = ?";
 
 }

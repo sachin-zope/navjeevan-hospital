@@ -32,7 +32,7 @@ public class AJIndoorRegister extends Model{
 	
 	public static String SELECT_INCOMPLETE = "SELECT id, admit_date, discharge_date, patient_name, "
 			+ "gender, address, age, diagnosis, treatment, fees, remarks, delivery_register_id, ot_register_id, "
-			+ "mtp_register_id FROM indoor_register WHERE discharge_date = null";
+			+ "mtp_register_id FROM indoor_register WHERE discharge_date IS null";
 	
 	public static String SELECT_FOR_DELIVERY_REPORT = "SELECT patient_name, gender, address, age, diagnosis, "
 			+ "treatment FROM indoor_register WHERE delivery_register_id = ?";
@@ -41,6 +41,6 @@ public class AJIndoorRegister extends Model{
 			+ "treatment FROM indoor_register WHERE mtp_register_id = ?";
 	
 	public static String SELECT_FOR_OT_REPORT = "SELECT patient_name, gender, address, age, diagnosis, "
-			+ "treatment FROM indoor_register WHERE ot_register_id = ?";
+			+ "treatment, mtp_register_id FROM indoor_register WHERE ot_register_id = ?";
 
 }

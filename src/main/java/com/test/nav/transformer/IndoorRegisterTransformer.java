@@ -49,22 +49,12 @@ public class IndoorRegisterTransformer {
 			}
 			irs.add(register);
 		}
-		Collections.sort(irs);
 		return irs;
 	}
 	
 	public DTOIndoorRegister transform(AJIndoorRegister ajIndoorRegister) {
 		DTOIndoorRegister register = new DTOIndoorRegister();
 		register.setId(ajIndoorRegister.getInteger(AJIndoorRegister.ID));
-		//register.setIpdNo(ajIndoorRegister.getLong(AJIndoorRegister.IPD_NO));
-		//register.setSerialNo(ajIndoorRegister.getInteger(AJIndoorRegister.SERIAL_NO));
-		
-		/*register.setAdmitDate(sdf.format(ajIndoorRegister.getDate(AJIndoorRegister.ADMIT_DATE)));
-		if (ajIndoorRegister.getDate(AJIndoorRegister.DISCHARGE_DATE) != null) {
-			register.setDischargeDate(sdf.format(ajIndoorRegister.getDate(AJIndoorRegister.DISCHARGE_DATE)));
-		} else {
-			register.setDischargeDate("");
-		}*/
 		register.setAdmitDate(ajIndoorRegister.getDate(AJIndoorRegister.ADMIT_DATE));
 		register.setDischargeDate(ajIndoorRegister.getDate(AJIndoorRegister.DISCHARGE_DATE));
 		register.setPatientName(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_NAME));

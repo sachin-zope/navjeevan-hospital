@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import com.test.nav.dao.MTPRegisterDao;
 import com.test.nav.model.DTOMtpRegister;
+import com.test.nav.model.DTOMtpRegisterDetails;
 import com.test.nav.util.AppUtil;
 
 /**
@@ -22,6 +23,7 @@ import com.test.nav.util.AppUtil;
 public class MTPRegisterController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private MTPRegisterDao mtpRegisterDao;
+	private static final String INSERT = "mtp_register.jsp";
 	private static final String EDIT = "edit_mtp_register.jsp";
 	private static final String REPORT = "mtp_register_report.jsp";
 
@@ -88,10 +90,67 @@ public class MTPRegisterController extends HttpServlet {
 			String year = session.getAttribute("REPORT_YEAR").toString();
 			forward = REPORT;
 			request.setAttribute("mtprs", mtpRegisterDao.getMtpRegisterByMonth(month, year));
-			
+		} else if(action.equalsIgnoreCase("add")) {
+			DTOMtpRegisterDetails dtoMtpRegisterDetails = generateMTPRegisterDetails(request);
+			DTOMtpRegister dtoMtpRegister = generateMTPRegisterForDetails(request);
+			mtpRegisterDao.insertWithDetails(dtoMtpRegister, dtoMtpRegisterDetails);
+			forward = INSERT;
+			request.setAttribute("RESP", "success");
 		}
 		RequestDispatcher view = request.getRequestDispatcher(forward);
 		view.forward(request, response);
+	}
+	
+	private DTOMtpRegisterDetails generateMTPRegisterDetails(HttpServletRequest request) {
+		DTOMtpRegisterDetails details = new DTOMtpRegisterDetails();
+		details.setpName(request.getParameter("pName"));
+		details.setGender(request.getParameter("gender"));
+		details.setpAddress(request.getParameter("pAddress"));
+		details.setAge(Integer.parseInt(request.getParameter("age")));
+		details.setRemarks(request.getParameter("remarks"));
+		
+		String fees = request.getParameter("fees");
+		if(fees != null && fees.length() > 0) {
+			details.setFees(Double.valueOf(fees));
+		}
+		
+		return details;
+	}
+	
+	private DTOMtpRegister generateMTPRegisterForDetails(HttpServletRequest request) { 
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+		DTOMtpRegister mtpRegister = new DTOMtpRegister();
+		mtpRegister.setDurationOfPregnancy(Integer.parseInt(request.getParameter("durationOfPregnancy")));
+		mtpRegister.setReligion(request.getParameter("religion"));
+		mtpRegister.setMarried(request.getParameter("married"));
+		mtpRegister.setMindication(request.getParameter("mindication"));
+		
+		String procedure = request.getParameter("procedure");
+		mtpRegister.setProcedure(procedure);
+		if(procedure.equalsIgnoreCase("Medication abortion")) {
+			mtpRegister.setBatchNo(request.getParameter("batchNo"));
+		} 
+		mtpRegister.setAlongWith(request.getParameter("alongWith"));
+		String strMChildrens = request.getParameter("mChildrens"); 
+		int mChildrens =  (strMChildrens != null && strMChildrens.length() > 0 ) ? Integer.parseInt(strMChildrens) : 0;  
+		mtpRegister.setmChildrens(mChildrens);
+		
+		String strFChildrens = request.getParameter("fChildrens");
+		int fChildrens = (strFChildrens != null && strFChildrens.length() > 0 ? Integer.parseInt(strFChildrens) : 0);
+		mtpRegister.setfChildrens(fChildrens);
+		
+		mtpRegister.setDoneByDr(request.getParameter("doneby"));
+		mtpRegister.setOpinionGivenBy(request.getParameter("opinionby"));
+		
+		Date opdDate;
+		try {
+			opdDate = dateFormatter.parse(request.getParameter("opdDate"));
+			mtpRegister.setOperationDate(opdDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return mtpRegister;
 	}
 	
 	private DTOMtpRegister generateMTPRegister(HttpServletRequest request) {

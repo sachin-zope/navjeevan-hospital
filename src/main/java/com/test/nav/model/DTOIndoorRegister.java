@@ -2,7 +2,7 @@ package com.test.nav.model;
 
 import java.util.Date;
 
-public class DTOIndoorRegister implements Comparable<DTOIndoorRegister> {
+public class DTOIndoorRegister {
 
 	private int id;
 	private Long ipdNo;
@@ -187,9 +187,5 @@ public class DTOIndoorRegister implements Comparable<DTOIndoorRegister> {
 				+ ", treatment=" + treatment + ", remarks=" + remarks + ", fees=" + fees + ", deliveryRegisterId="
 				+ deliveryRegisterId + ", mtpRegisterId=" + mtpRegisterId + ", otRegisterId=" + otRegisterId + ", createDate="
 				+ createDate + ", updateDate=" + updateDate + "]";
-	}
-
-	public int compareTo(DTOIndoorRegister o) {
-		return this.getDischargeDate().compareTo(o.getDischargeDate());
 	}
 }

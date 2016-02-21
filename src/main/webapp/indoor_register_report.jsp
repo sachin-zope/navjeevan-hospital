@@ -40,8 +40,9 @@
 				<h4><%= session.getAttribute("REPORT_MONTH") %>, <%= session.getAttribute("REPORT_YEAR") %></h4>
 			</div>
 			<div class="col-sm-6" style="text-align: right;">
-				<form class="form-inline" action="IndoorRegisterController">
+				<form class="form-inline" action="IndoorRegisterController" method="get">
 					<input type="hidden" name="action" value="report">
+					<input type="hidden" name="type" value="complete">
 					<div class="form-group">
 						<select name="month" class="form-control">
 							<option value="">Select Month</option>
@@ -98,6 +99,9 @@
 									<c:when test="${ ir.treatment == 'MTP' }">
 										<td><c:out value="${ir.mtpSerialNo}" /></td>
 									</c:when>
+									<c:when test="${ ir.treatment == 'MTP + Tubectomy' }">
+										<td><c:out value="${ir.mtpSerialNo}" /></td>
+									</c:when>
 									<c:when test="${ ir.treatment == 'MTP + Abdominal Tubectomy' }">
 										<td><c:out value="${ir.mtpSerialNo}" /></td>
 									</c:when>
@@ -114,7 +118,7 @@
 								<td><c:out value="${ir.diagnosis}" /></td>
 								<td><c:out value="${ir.treatment}" /></td>
 								<td><c:out value="${ir.fees}" /></td>
-								<td><a href="IndoorRegisterController?action=edit&id=<c:out value="${ir.id}"/>">Edit</a>
+								<td><a href="IndoorRegisterController?action=edit&from=complete&id=<c:out value="${ir.id}"/>">Edit</a>
 								 &nbsp; <a href="IndoorRegisterController?action=delete&id=<c:out value="${ir.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a></td>
 							</tr>
 						</c:forEach>

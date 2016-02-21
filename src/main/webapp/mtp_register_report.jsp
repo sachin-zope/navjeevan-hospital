@@ -108,7 +108,16 @@
 											<c:out value="${mtpr.gender}"/>/<c:out value="${mtpr.age}"/></td>
 											<!-- display batch no -->
 								<td><c:out value="${mtpr.durationOfPregnancy}" /></td>
-								<td><c:out value="${mtpr.mindication}" /></td>
+								<td>Indication: <c:out value="${mtpr.mindication}" /><br>
+									Method: <c:out value="${mtpr.procedure}" /><br>
+									With: <c:out value="${mtpr.alongWith}" />
+									<c:choose>
+										<c:when test="${mtpr.batchNo != null }">
+											<br>BatchNo: <c:out value="${mtpr.batchNo}" />
+										</c:when>
+									</c:choose>
+									
+								</td>
 								<td><c:out value="${mtpr.opinionGivenBy}" /></td>
 								<td><c:out value="${mtpr.doneByDr}" /></td>
 								<td>M: <c:out value="${mtpr.mChildrens}" /><br>

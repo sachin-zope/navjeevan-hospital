@@ -10,7 +10,9 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.LazyList;
 
 import com.test.nav.model.AJMtpRegister;
+import com.test.nav.model.AJMtpRegisterDetails;
 import com.test.nav.model.DTOMtpRegister;
+import com.test.nav.model.DTOMtpRegisterDetails;
 import com.test.nav.transformer.MtpRegisterTransformer;
 import com.test.nav.util.AppUtil;
 import com.test.nav.util.DbUtil;
@@ -26,12 +28,35 @@ public class MTPRegisterDao {
 		return serialNo;
 	}
 	
-	public int insert(DTOMtpRegister dtoMtpRegister) {
+	public void insertWithDetails(DTOMtpRegister dtoMtpRegister, DTOMtpRegisterDetails dtoMtpRegisterDetails) {
 		Connection conn = null;
 		try {
 			conn = DbUtil.getConnection();
 			conn.setReadOnly(false);
 			Base.openTransaction();
+			int id = insert(dtoMtpRegister);
+			System.out.println("inserted mtp register id:" + id);
+			AJMtpRegisterDetails ajMtpRegisterDetails = new AJMtpRegisterDetails();
+			ajMtpRegisterDetails.setInteger(AJMtpRegisterDetails.MTP_REGISTER_ID, id);
+			ajMtpRegisterDetails.setString(AJMtpRegisterDetails.PATIENT_NAME, dtoMtpRegisterDetails.getpName());
+			ajMtpRegisterDetails.setString(AJMtpRegisterDetails.ADDRESS, dtoMtpRegisterDetails.getpAddress());
+			ajMtpRegisterDetails.setString(AJMtpRegisterDetails.GENDER, dtoMtpRegisterDetails.getGender());
+			ajMtpRegisterDetails.setInteger(AJMtpRegisterDetails.AGE, dtoMtpRegisterDetails.getAge());
+			ajMtpRegisterDetails.setDouble(AJMtpRegisterDetails.FEES, dtoMtpRegisterDetails.getFees());
+			ajMtpRegisterDetails.setString(AJMtpRegisterDetails.REMARKS, dtoMtpRegisterDetails.getRemarks());
+			ajMtpRegisterDetails.save();
+			Base.commitTransaction();
+			System.out.println("saved details: " + ajMtpRegisterDetails.getId());
+		} catch (Throwable t) {
+			Base.rollbackTransaction();
+			t.printStackTrace();
+		} finally {
+			Base.close();
+		}
+	}
+	
+	public int insert(DTOMtpRegister dtoMtpRegister) throws Exception {
+		try {
 			AJMtpRegister ajMtpRegister = new AJMtpRegister();
 			ajMtpRegister.setInteger(AJMtpRegister.MTP_SERIAL_NO, generateSerialNo(dtoMtpRegister.getOperationDate()));
 			ajMtpRegister.setString(AJMtpRegister.RELIGION, dtoMtpRegister.getReligion());
@@ -47,15 +72,10 @@ public class MTPRegisterDao {
 			ajMtpRegister.setString(AJMtpRegister.OPINION_GIVEN_BY, dtoMtpRegister.getOpinionGivenBy());
 			ajMtpRegister.setString(AJMtpRegister.BATCH_NO, dtoMtpRegister.getBatchNo());
 			ajMtpRegister.save();
-			Base.commitTransaction();
 			return Integer.parseInt(ajMtpRegister.getId().toString());
-		} catch (Throwable t) {
-			Base.rollbackTransaction();
-			t.printStackTrace();
-		} finally {
-			Base.close();
+		} catch (Exception e) {
+			throw e;
 		}
-		return 0;
 	}
 	
 	public void update(DTOMtpRegister dtoMtpRegister) {
@@ -173,6 +193,15 @@ public class MTPRegisterDao {
 			Base.close();
 		}
 
+		return null;
+	}
+	
+	public AJMtpRegisterDetails getMtpRegisterDetailsForMtpReport(int id) {
+		LazyList<AJMtpRegisterDetails> details = AJMtpRegisterDetails.findBySQL(AJMtpRegisterDetails.SELECT, id);
+		if(!details.isEmpty()) {
+			return details.get(0);
+		}
+		
 		return null;
 	}
 
