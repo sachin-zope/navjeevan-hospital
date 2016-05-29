@@ -79,6 +79,7 @@ public class DeliveryRegisterDao {
 		try {
 			conn.setReadOnly(true);
 			Base.openTransaction();
+			System.out.println("getting delivery register for id:" + id);
 			return new DeliveryRegisterTransformer().transformForEdit((AJDeliveryRegister) AJDeliveryRegister.findById(id));
 		} catch (Throwable t) {
 			t.printStackTrace();

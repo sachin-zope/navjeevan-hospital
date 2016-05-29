@@ -55,4 +55,14 @@
     <servlet-name>DeliveryRegisterController</servlet-name>
     <url-pattern>/DeliveryRegisterController</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>BillController</display-name>
+    <servlet-name>BillController</servlet-name>
+    <servlet-class>com.test.nav.controller.BillController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BillController</servlet-name>
+    <url-pattern>/BillController</url-pattern>
+  </servlet-mapping>
 </web-app>

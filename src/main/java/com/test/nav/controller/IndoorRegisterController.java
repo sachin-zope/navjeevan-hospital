@@ -29,6 +29,8 @@ public class IndoorRegisterController extends HttpServlet {
 	private static String EDIT = "/edit_indoor_register.jsp";
 	private static String INDOOR_REPORT = "/indoor_register_report.jsp";
 	private static String INCOMPLETE_INDOOR_REPORT = "/incomplete_indoor_register_report.jsp";
+	private static String BILL = "/bill.jsp";
+	private static String PRINT_INDOOR_REGISTER = "/print_indoor_register.jsp";
 	private IndoorRegisterDao indoorRegisterDao;
 
 	/**
@@ -43,6 +45,7 @@ public class IndoorRegisterController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String forward = "";
 		String action = request.getParameter("action");
@@ -66,7 +69,14 @@ public class IndoorRegisterController extends HttpServlet {
 				HttpSession session = request.getSession();
 				session.setAttribute("FROM", request.getParameter("from"));
 				request.setAttribute("ir", ir);
-			} else if (action.equalsIgnoreCase("report")) {
+			} else if (action.equalsIgnoreCase("bill")) {
+				forward = BILL;
+				int id = Integer.parseInt(request.getParameter("id"));
+				System.out.println("request to bill indoor register for id:" + id);
+				DTOIndoorRegister ir = indoorRegisterDao.getIndoorRegisterById(id);
+				ir.setIpdNo(Long.parseLong(request.getParameter("ipdno")));
+				request.setAttribute("ir", ir);
+		    } else if (action.equalsIgnoreCase("report")) {
 
 				String type = request.getParameter("type");
 				List<DTOIndoorRegister> indoorList = null;
@@ -88,12 +98,18 @@ public class IndoorRegisterController extends HttpServlet {
 						session.setAttribute("REPORT_YEAR", year);
 						forward = INDOOR_REPORT;
 						indoorList = indoorRegisterDao.getIndoorRegistersByMonth(month, year);
+						session.setAttribute("INDOOR_LIST", indoorList);
 					} else if (type.equalsIgnoreCase("incomplete")) {
 						indoorList = indoorRegisterDao.getIncompleteIndoorRegister();
 						forward = INCOMPLETE_INDOOR_REPORT;
 					}
 				}
 
+				request.setAttribute("irs", indoorList);
+			} else if (action.equalsIgnoreCase("print")) { 
+				forward = PRINT_INDOOR_REGISTER;
+				HttpSession session = request.getSession();
+				List<DTOIndoorRegister> indoorList = (List<DTOIndoorRegister>) session.getAttribute("INDOOR_LIST");
 				request.setAttribute("irs", indoorList);
 			} else {
 				forward = INSERT;
@@ -104,7 +120,6 @@ public class IndoorRegisterController extends HttpServlet {
 
 		RequestDispatcher view = request.getRequestDispatcher(forward);
 		view.forward(request, response);
-
 	}
 
 	/**

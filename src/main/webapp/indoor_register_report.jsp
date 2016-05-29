@@ -37,7 +37,7 @@
 		</div>
 		<div class="row" style="padding-bottom: 20px;">
 			<div class="col-sm-6">
-				<h4><%= session.getAttribute("REPORT_MONTH") %>, <%= session.getAttribute("REPORT_YEAR") %></h4>
+				<h4><%= session.getAttribute("REPORT_MONTH") %>, <%= session.getAttribute("REPORT_YEAR") %></h4> <a href="IndoorRegisterController?action=print" target="_blank">Print Report</a>
 			</div>
 			<div class="col-sm-6" style="text-align: right;">
 				<form class="form-inline" action="IndoorRegisterController" method="get">
@@ -119,6 +119,14 @@
 								<td><c:out value="${ir.treatment}" /></td>
 								<td><c:out value="${ir.fees}" /></td>
 								<td><a href="IndoorRegisterController?action=edit&from=complete&id=<c:out value="${ir.id}"/>">Edit</a>
+								<c:choose>
+									<c:when test="${(ir.fees > 0) && ir.billGenerated == false}">
+										&nbsp; <a href="IndoorRegisterController?action=bill&id=<c:out value="${ir.id}"/>&ipdno=<c:out value="${ir.ipdNo}" />">Bill</a>
+									</c:when>
+									<c:when test="${ir.billGenerated == true }">
+										&nbsp; <a href="BillController?action=view&id=<c:out value="${ir.id}"/> 	">View Bill</a>
+									</c:when>
+								</c:choose>
 								 &nbsp; <a href="IndoorRegisterController?action=delete&id=<c:out value="${ir.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a></td>
 							</tr>
 						</c:forEach>

@@ -82,18 +82,22 @@ public class DeliveryRegisterTransformer {
 	}
 	
 	public DTODeliveryRegister transformForEdit(AJDeliveryRegister ajDeliveryRegister) {
-		DTODeliveryRegister dtoDeliveryRegister = new DTODeliveryRegister();
-		dtoDeliveryRegister.setId(ajDeliveryRegister.getInteger(AJDeliveryRegister.ID));
-		dtoDeliveryRegister.setDeliveryDate(ajDeliveryRegister.getDate(AJDeliveryRegister.DELIVERY_DATE));
-		dtoDeliveryRegister.setEpisiotomy(ajDeliveryRegister.getString(AJDeliveryRegister.EPISIOTOMY));
-		dtoDeliveryRegister.setDeliveryType(ajDeliveryRegister.getString(AJDeliveryRegister.DELIVERY_TYPE));
-		dtoDeliveryRegister.setSexOfChild(ajDeliveryRegister.getString(AJDeliveryRegister.SEX_OF_CHILD));
-		dtoDeliveryRegister.setBirthWeight(ajDeliveryRegister.getDouble(AJDeliveryRegister.BIRTH_WEIGHT));
-		dtoDeliveryRegister.setBirthTime(ajDeliveryRegister.getString(AJDeliveryRegister.BIRTH_TIME));
-		dtoDeliveryRegister.setIndication(ajDeliveryRegister.getString(AJDeliveryRegister.INDICATION));
-		dtoDeliveryRegister.setDeliveryRemarks(ajDeliveryRegister.getString(AJDeliveryRegister.REMARKS));
-		System.out.println(dtoDeliveryRegister.toString());
-		return dtoDeliveryRegister;
+		if (ajDeliveryRegister != null) {
+			DTODeliveryRegister dtoDeliveryRegister = new DTODeliveryRegister();
+			dtoDeliveryRegister.setId(ajDeliveryRegister.getInteger(AJDeliveryRegister.ID));
+			dtoDeliveryRegister.setDeliveryDate(ajDeliveryRegister.getDate(AJDeliveryRegister.DELIVERY_DATE));
+			dtoDeliveryRegister.setEpisiotomy(ajDeliveryRegister.getString(AJDeliveryRegister.EPISIOTOMY));
+			dtoDeliveryRegister.setDeliveryType(ajDeliveryRegister.getString(AJDeliveryRegister.DELIVERY_TYPE));
+			dtoDeliveryRegister.setSexOfChild(ajDeliveryRegister.getString(AJDeliveryRegister.SEX_OF_CHILD));
+			dtoDeliveryRegister.setBirthWeight(ajDeliveryRegister.getDouble(AJDeliveryRegister.BIRTH_WEIGHT));
+			dtoDeliveryRegister.setBirthTime(ajDeliveryRegister.getString(AJDeliveryRegister.BIRTH_TIME));
+			dtoDeliveryRegister.setIndication(ajDeliveryRegister.getString(AJDeliveryRegister.INDICATION));
+			dtoDeliveryRegister.setDeliveryRemarks(ajDeliveryRegister.getString(AJDeliveryRegister.REMARKS));
+			System.out.println(dtoDeliveryRegister.toString());
+			return dtoDeliveryRegister;
+		} 
+		
+		return null;
 	}
 
 }

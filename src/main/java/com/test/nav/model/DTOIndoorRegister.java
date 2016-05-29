@@ -18,6 +18,7 @@ public class DTOIndoorRegister {
 	private String treatment;
 	private String remarks;
 	private double fees;
+	private boolean billGenerated;
 	private int deliveryRegisterId;
 	private int mtpRegisterId;
 	private int otRegisterId;
@@ -139,6 +140,14 @@ public class DTOIndoorRegister {
 		this.fees = fees;
 	}
 	
+	public boolean isBillGenerated() {
+		return billGenerated;
+	}
+
+	public void setBillGenerated(boolean billGenerated) {
+		this.billGenerated = billGenerated;
+	}
+
 	public int getDeliveryRegisterId() {
 		return deliveryRegisterId;
 	}
@@ -182,10 +191,11 @@ public class DTOIndoorRegister {
 	@Override
 	public String toString() {
 		return "DTOIndoorRegister [id=" + id + ", ipdNo=" + ipdNo + ", serialNo=" + serialNo + ", mtpSerialNo="
-				+ mtpSerialNo + ", admitDate=" + admitDate + ", dischargeDate=" + dischargeDate + ", patientName=" + patientName
-				+ ", gender=" + gender + ", patientAddress=" + patientAddress + ", age=" + age + ", diagnosis=" + diagnosis
-				+ ", treatment=" + treatment + ", remarks=" + remarks + ", fees=" + fees + ", deliveryRegisterId="
-				+ deliveryRegisterId + ", mtpRegisterId=" + mtpRegisterId + ", otRegisterId=" + otRegisterId + ", createDate="
-				+ createDate + ", updateDate=" + updateDate + "]";
+				+ mtpSerialNo + ", admitDate=" + admitDate + ", dischargeDate=" + dischargeDate + ", patientName="
+				+ patientName + ", gender=" + gender + ", patientAddress=" + patientAddress + ", age=" + age
+				+ ", diagnosis=" + diagnosis + ", treatment=" + treatment + ", remarks=" + remarks + ", fees=" + fees
+				+ ", isBillGenerated=" + billGenerated + ", deliveryRegisterId=" + deliveryRegisterId
+				+ ", mtpRegisterId=" + mtpRegisterId + ", otRegisterId=" + otRegisterId + ", createDate=" + createDate
+				+ ", updateDate=" + updateDate + "]";
 	}
 }

@@ -13,10 +13,11 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <title>Navjeevan Hospital</title>
 
-	<script src="js/jquery-1.12.0.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	
-	<link href="css/bootstrap.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
 <style>
 #diagnosisOther {
 	display: none;
@@ -35,158 +36,45 @@
 <script type="text/javascript">
 
 function validate() {
-	if(!$("#admitDate").val()) {
-		alert("Please select admit date");
+	if($('#room_type').val() == "-1") {
+		alert("Please select Room Type");
 		return false;
 	}
 	
-	if(!$("#pName").val()) {
-		alert("Please enter patient name");
-		return false;
-	}
-	
-	if(!$("#pAddress").val()) {
-		alert("Please enter patient address");
-		return false;
-	}
-	
-	if(!$("#age").val()) {
-		alert("Please enter age");
-		return false;
-	}
-	
-	if($('#diagnosis').val() == "-1") {
-		alert("Please select Diagnosis");
-		return false;
-	}
-	
-	if($('#treatment').val() == "-1") {
-		alert("Please select Treatment");
-		return false;
-	}
-	
-	$('#indoorForm').submit();
-};
+	$('#bill_form').submit();
+}
 
 function goBack() {
 	window.history.back();
-};
-
-$(document).ready(function () {
-	
-	$('input[name=pName]').on('keyup', function(){
-		var $this = $(this), value = $this.val(); 
-        $this.val( value.toUpperCase() );
-	});
-	
-	$('input[name=pAddress]').on('keyup', function(){
-		var $this = $(this), value = $this.val(); 
-        $this.val( value.toUpperCase() );
-	});
-	
-	$('input[name="admitDate"]').change(function(){
-        var doa = new Date(this.value);
-        
-        if($("#dischargeDate").val()) {
-        	var dod =  new Date($("#dischargeDate").val());
-        	if(doa.getTime() > dod.getTime()) {
-    			alert("Admit date should be equal to or earlier than Discharge Date");
-    			this.value = "";
-    		}
-        }
-        
-        if($("#mtpOperationDate").val()) {
-        	var dop =  new Date($("#mtpOperationDate").val());
-        	if(doa.getTime() > dop.getTime()) {
-    			alert("Admit date should be equal to or earlier than Operation Date");
-    			this.value = "";
-    		}
-        }
-    });
-	
-	$('input[name="dischargeDate"]').change(function(){
-        var dod = new Date(this.value);
-        
-        if($("#admitDate").val()) {
-        	var doa = new Date($("#admitDate").val());
-        	if(doa.getTime() > dod.getTime()) {
-    			alert("Discharge date should be equal to or later than Admit Date");
-    			this.value = dod;
-    		}
-        }
-        
-        if($("#mtpOperationDate").val()) {
-        	var dop =  new Date($("#mtpOperationDate").val());
-        	if(dod.getTime() < dop.getTime()) {
-    			alert("Discharge date should be equal to or later than Operation Date");
-    			this.value = "";
-    		}
-        }
-    });
-	
-    $("#reponseAlert").fadeTo(2000, 500).slideUp(500, function(){
-    });
-    
-	$('select[name=diagnosis]').change(function(e){
-	  if ($(this).val() == 'other'){
-	    $('#diagnosisOther').show();
-	  }else{
-	    $('#diagnosisOther').hide();
-	  }
-	});
-});
+}
 </script>
-
-</head>
+</head>	
 <body>
 	<jsp:include page="nav.html"></jsp:include>
-
 	<div class="container">
 		<div class="page-header">
-			<h3>Indoor Register</h3>
+			<h3>Select Rooom Type</h3>
 		</div>
 
 		<div class="row">
 			<form class="form-horizontal" method="post"
-				action="IndoorRegisterController" id="indoorForm">
-				<input type="hidden" name="action" value = "edit"/>
+				action="BillController" id="bill_form">
+				<input type="hidden" name="action" value="generate">
 				<input type="hidden" name="id" value="<c:out value="${ir.id}" />"/>
+				<input type="hidden" name="ipdno" value="<c:out value="${ir.ipdNo}" />"/>
 				<div class="form-group">
 					<label for="admitDate" class="col-sm-2 control-label">Admit
 						Date</label>
 					<div class="col-sm-3">
-						<c:choose>
-							<c:when test="${not ir.billGenerated}">
-								<input type="date" class="form-control" id="admitDate"
-									name="admitDate" placeholder="Admit Date"
-									value="<fmt:formatDate pattern="yyyy-MM-dd" value="${ir.admitDate}" />"
-									required>
-							</c:when>
-							<c:otherwise>
-								<input type="date" class="form-control" id="admitDate"
-									name="admitDate" placeholder="Admit Date"
-									value="<fmt:formatDate pattern="yyyy-MM-dd" value="${ir.admitDate}" />"
-									readonly="readonly">
-							</c:otherwise>
-						</c:choose>
+						<input type="date" class="form-control" id="admitDate"
+							name="admitDate" placeholder="Admit Date" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${ir.admitDate}" />" readonly="readonly">
 					</div>
 
 					<label for="dischargeDate" class="col-sm-2 control-label">Discharge
 						Date</label>
 					<div class="col-sm-3">
-						<c:choose>
-							<c:when test="${not ir.billGenerated}">
-								<input type="date" class="form-control" id="dischargeDate"
-									name="dischargeDate" placeholder="Discharge Date"
-									value="<fmt:formatDate pattern="yyyy-MM-dd" value="${ir.dischargeDate}" />">
-							</c:when>
-							<c:otherwise>
-								<input type="date" class="form-control" id="dischargeDate"
-									name="dischargeDate" placeholder="Discharge Date"
-									value="<fmt:formatDate pattern="yyyy-MM-dd" value="${ir.dischargeDate}" />"
-									readonly="readonly">
-							</c:otherwise>
-						</c:choose>
+						<input type="date" class="form-control" id="dischargeDate"
+							name="dischargeDate" placeholder="Discharge Date" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${ir.dischargeDate}" />" readonly="readonly">
 					</div>
 				</div>
 
@@ -194,16 +82,16 @@ $(document).ready(function () {
 					<label for="pName" class="col-sm-2 control-label">Name</label>
 					<div class="col-sm-4">
 						<input type="text" class="form-control" id="pName" name="pName"
-							placeholder="Patient Name" value="<c:out value="${ir.patientName}" />" required>
+							placeholder="Patient Name" value="<c:out value="${ir.patientName}" />" readonly="readonly">
 					</div>
 
 					<label class="col-sm-1 control-label"></label>
 					<div class="col-sm-4">
 						<div class="radio">
 							<label class="radio-inline"> <input type="radio"
-								name="gender" id="male" value="male"> Male
+								name="gender" id="male" value="male" disabled="disabled"> Male
 							</label> <label class="radio-inline"> <input type="radio"
-								name="gender" id="female" value="female" checked> Female
+								name="gender" id="female" value="female" checked disabled="disabled"> Female
 							</label>
 						</div>
 					</div>
@@ -213,20 +101,20 @@ $(document).ready(function () {
 					<label for="pAddress" class="col-sm-2 control-label">Address</label>
 					<div class="col-sm-4">
 						<textarea class="form-control" rows="3" id="pAddress"
-							name="pAddress" placeholder="Address" required><c:out value="${ir.patientAddress}" /></textarea>
+							name="pAddress" placeholder="Address" readonly="readonly"><c:out value="${ir.patientAddress}" /></textarea>
 					</div>
 
 					<label for="age" class="col-sm-1 control-label">Age </label>
 					<div class="col-sm-3">
 						<input type="number" class="form-control" id="age" name="age"
-							placeholder="Age" max="100" min="1" value="<c:out value="${ir.age}" />" required>
+							placeholder="Age" max="100" min="1" value="<c:out value="${ir.age}" />" readonly="readonly">
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label for="diagnosis" class="col-sm-2 control-label">Diagnosis</label>
 					<div class="col-sm-3">
-						<select name="diagnosis" id="diagnosis" class="form-control">
+						<select name="diagnosis" id="diagnosis" class="form-control" disabled>
 							<option value="-1">Select Diagnosis</option>
 							<option value="<c:out value="${ir.diagnosis}" />" selected><c:out value="${ir.diagnosis}" /></option>
 							<option value="Primigravida">Primigravida</option>
@@ -289,28 +177,26 @@ $(document).ready(function () {
 				<div class="form-group">
 					<label for="fees" class="col-sm-2 control-label">Fees</label>
 					<div class="col-sm-3">
-						<c:choose>
-							<c:when test="${not ir.billGenerated}">
-								<input type="text" class="form-control" id="fees" name="fees"
-							placeholder="Fees" value="<c:out value="${ir.fees}" />">
-							</c:when>
-							<c:otherwise>
-								<input type="text" class="form-control" id="fees" name="fees"
+						<input type="text" class="form-control" id="fees" name="fees"
 							placeholder="Fees" value="<c:out value="${ir.fees}" />" readonly="readonly">
-							</c:otherwise>
-						</c:choose>
 					</div>
 
-					<label for="remarks" class="col-sm-2 control-label">Remarks</label>
+				</div>
+
+				<div class="form-group">
+					<label for="room_type" class="col-sm-2 control-label">Room Type</label>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" id="remarks"
-							name="remarks" placeholder="Remarks" value="<c:out value="${ir.remarks}" />">
+						<select id="room_type" name="room_type" class="form-control">
+								<option value="-1"></option>
+								<option value="general">General</option>
+								<option value="semi-special">Semi Special</option>
+							</select>
 					</div>
 				</div>
 
 				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<button type="button" class="btn btn-success" onclick="validate()">Save</button>
+					<div class="col-sm-offset-3 col-sm-10">
+						<button type="button" class="btn btn-success" onclick="validate()">Generate Bill</button>
 						<button type="button" class="btn btn-default" onclick="goBack()">Cancel</button>
 					</div>
 				</div>

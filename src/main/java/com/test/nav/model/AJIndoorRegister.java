@@ -19,6 +19,7 @@ public class AJIndoorRegister extends Model{
 	public static final String TREATMENT = "treatment";
 	public static final String REMARKS = "remarks";
 	public static final String FEES = "fees";
+	public static final String IS_BILL_GENERATED = "is_bill_generated";
 	public static final String DELIVERY_REGISTER_ID = "delivery_register_id";
 	public static final String MTP_REGISTER_ID = "mtp_register_id";
 	public static final String OT_REGISTER_ID = "ot_register_id";
@@ -26,12 +27,12 @@ public class AJIndoorRegister extends Model{
 	public static final String UPDATE_DATE = "update_date";
 	
 	public static String SELECT_BY_MONTH = "SELECT id, admit_date, discharge_date, patient_name, "
-			+ "gender, address, age, diagnosis, treatment, fees, remarks, delivery_register_id, ot_register_id, "
+			+ "gender, address, age, diagnosis, treatment, fees, is_bill_generated, remarks, delivery_register_id, ot_register_id, "
 			+ "mtp_register_id FROM indoor_register WHERE date_format(discharge_date, '%b') = ? and "
 			+ "date_format(discharge_date, '%Y') = ? order by discharge_date asc";
 	
 	public static String SELECT_INCOMPLETE = "SELECT id, admit_date, discharge_date, patient_name, "
-			+ "gender, address, age, diagnosis, treatment, fees, remarks, delivery_register_id, ot_register_id, "
+			+ "gender, address, age, diagnosis, treatment, fees, is_bill_generated, remarks, delivery_register_id, ot_register_id, "
 			+ "mtp_register_id FROM indoor_register WHERE discharge_date IS null";
 	
 	public static String SELECT_FOR_DELIVERY_REPORT = "SELECT patient_name, gender, address, age, diagnosis, "
