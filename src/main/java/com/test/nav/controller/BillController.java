@@ -1,6 +1,7 @@
 package com.test.nav.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.test.nav.dao.BillDao;
 import com.test.nav.dao.IndoorRegisterDao;
 import com.test.nav.model.DTOBill;
+import com.test.nav.model.DTOBillPrint;
+import com.test.nav.model.DTOBillReceipt;
 import com.test.nav.model.DTOIndoorRegister;
 
 /**
@@ -21,6 +24,8 @@ public class BillController extends HttpServlet {
     
 	private static final String BILL_FINAL = "/bill_final.jsp";
 	private static final String BILLS_BY_MONTH = "/bills_by_month.jsp";
+	private static final String BILL_RECEIPT = "/bill_receipt.jsp";
+	private static final String BILL_PRINT = "/bill_print.jsp";
     
 	private IndoorRegisterDao indoorRegisterDao;
 	private BillDao billDao;
@@ -38,8 +43,32 @@ public class BillController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String forward = "";
+		String action = request.getParameter("action");
+		System.out.println("get action = " + action);
+
+		if (action != null && !action.isEmpty()) {
+			if (action.equalsIgnoreCase("bills_by_month")) {
+				forward = BILLS_BY_MONTH;
+				List<DTOBill> listBills = billDao.getBillsByMonth();
+				request.setAttribute("bills", listBills);
+			} else if(action.equalsIgnoreCase("view")) {
+				
+			} else if(action.equalsIgnoreCase("print")) {
+				forward = BILL_PRINT;
+				int id = Integer.parseInt(request.getParameter("id"));
+				DTOBillPrint dtoBillPrint = billDao.getBillToPrint(id);
+				request.setAttribute("print", dtoBillPrint);
+			} else if(action.equalsIgnoreCase("receipt")) {
+				forward = BILL_RECEIPT;
+				int id = Integer.parseInt(request.getParameter("id"));
+				DTOBillReceipt dtoBillReceipt = billDao.generateReceipt(id);
+				request.setAttribute("receipt", dtoBillReceipt);
+			}
+		}
+		
+		RequestDispatcher view = request.getRequestDispatcher(forward);
+		view.forward(request, response);
 	}
 
 	/**
@@ -65,7 +94,7 @@ public class BillController extends HttpServlet {
 				forward = BILLS_BY_MONTH;
 				DTOBill dtoBill = populateBillFromRequest(request);
 				billDao.save(dtoBill);
-			}
+			} 
 		}
 		
 		RequestDispatcher view = request.getRequestDispatcher(forward);

@@ -1,15 +1,24 @@
 package com.test.nav.dao;
 
 import java.sql.Connection;
+import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.javalite.activejdbc.Base;
+import org.javalite.activejdbc.LazyList;
 
 import com.test.nav.model.AJBill;
+import com.test.nav.model.AJDeliveryRegister;
 import com.test.nav.model.AJIndoorRegister;
+import com.test.nav.model.AJMtpRegister;
+import com.test.nav.model.AJOTRegister;
 import com.test.nav.model.DTOBill;
+import com.test.nav.model.DTOBillPrint;
+import com.test.nav.model.DTOBillReceipt;
 import com.test.nav.model.DTODeliveryRegister;
 import com.test.nav.model.DTOIndoorRegister;
+import com.test.nav.transformer.BillTransformer;
 import com.test.nav.util.DbUtil;
 
 public class BillDao {
@@ -57,6 +66,25 @@ public class BillDao {
 		} finally {
 			Base.close();
 		}
+	}
+	
+	public List<DTOBill> getBillsByMonth() {
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+			conn.setReadOnly(true);
+			Base.openTransaction();
+			
+			List<AJBill> ajBills = AJBill.findAll().orderBy("create_date desc");
+			return new BillTransformer().transformList(ajBills);
+		} catch (Throwable t) {
+			Base.rollbackTransaction();
+			t.printStackTrace();
+		} finally {
+			Base.close();
+		}
+		
+		return null;
 	}
 	
 	public DTOBill generateBill(String roomType, DTOIndoorRegister indoorRegister) {
@@ -173,5 +201,67 @@ public class BillDao {
 		} catch (NumberFormatException nfe) {
 			return 0;
 		}
+	}
+
+	public DTOBillPrint getBillToPrint(int billId) {
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+			conn.setReadOnly(true);
+			Base.openTransaction();
+			
+			AJBill ajBill = AJBill.findById(billId);
+			AJIndoorRegister ajIndoorRegister = AJIndoorRegister.findById(ajBill.getInteger(AJBill.INDOOR_REGISTER_ID));
+			
+			int deliveryId = ajIndoorRegister.getInteger(AJIndoorRegister.DELIVERY_REGISTER_ID) != null ? ajIndoorRegister.getInteger(AJIndoorRegister.DELIVERY_REGISTER_ID) : 0;
+			int mtpId = ajIndoorRegister.getInteger(AJIndoorRegister.MTP_REGISTER_ID) != null ? ajIndoorRegister.getInteger(AJIndoorRegister.MTP_REGISTER_ID) : 0;
+			int otId = ajIndoorRegister.getInteger(AJIndoorRegister.OT_REGISTER_ID) != null ? ajIndoorRegister.getInteger(AJIndoorRegister.OT_REGISTER_ID) : 0;
+			Date operationDate = null;
+			if ( deliveryId > 0 ) {
+				LazyList<AJDeliveryRegister> ajDeliveryRegisters = AJDeliveryRegister.findBySQL("select delivery_date from delivery_register where id = ?", deliveryId);
+				if (!ajDeliveryRegisters.isEmpty()) {
+					operationDate = ajDeliveryRegisters.get(0).getDate(AJDeliveryRegister.DELIVERY_DATE);
+				}
+			} else if (mtpId > 0) {
+				LazyList<AJMtpRegister> ajMtpRegisters = AJMtpRegister.findBySQL("select operation_date from mtp_register where id = ?", mtpId);
+				if (!ajMtpRegisters.isEmpty()) {
+					operationDate = ajMtpRegisters.get(0).getDate(AJMtpRegister.OPERATION_DATE);
+				}
+			} else if (otId > 0) {
+				LazyList<AJOTRegister> ajotRegisters = AJOTRegister.findBySQL("select operation_date from ot_register where id = ?", otId);
+				if (!ajotRegisters.isEmpty()) {
+					operationDate = ajotRegisters.get(0).getDate(AJOTRegister.OPERATION_DATE);
+				}
+			}
+			
+			return new BillTransformer().tranformBillToPrint(ajBill, ajIndoorRegister, operationDate);
+		} catch (Throwable t) {
+			Base.rollbackTransaction();
+			t.printStackTrace();
+		} finally {
+			Base.close();
+		}
+		
+		return null;
+	}
+	
+	public DTOBillReceipt generateReceipt(int billId) {
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+			conn.setReadOnly(true);
+			Base.openTransaction();
+			
+			AJBill ajBill = AJBill.findById(billId);
+			AJIndoorRegister ajIndoorRegister = AJIndoorRegister.findById(ajBill.getInteger(AJBill.INDOOR_REGISTER_ID));
+			return new BillTransformer().tranformBillForReceipt(ajBill, ajIndoorRegister);
+		} catch (Throwable t) {
+			Base.rollbackTransaction();
+			t.printStackTrace();
+		} finally {
+			Base.close();
+		}
+		
+		return null;
 	}
 }
