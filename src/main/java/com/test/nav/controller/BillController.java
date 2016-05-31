@@ -1,7 +1,6 @@
 package com.test.nav.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,10 +22,11 @@ public class BillController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
 	private static final String BILL_FINAL = "/bill_final.jsp";
-	private static final String BILLS_BY_MONTH = "/bills_by_month.jsp";
+	private static final String INDOOR_REGISTER = "/dummy_redirect.jsp";
 	private static final String BILL_RECEIPT = "/bill_receipt.jsp";
 	private static final String BILL_PRINT = "/bill_print.jsp";
-    
+	private static final String BILL_EDIT = "/bill_edit.jsp";
+	
 	private IndoorRegisterDao indoorRegisterDao;
 	private BillDao billDao;
 	
@@ -45,25 +45,24 @@ public class BillController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String forward = "";
 		String action = request.getParameter("action");
-		System.out.println("get action = " + action);
+		System.out.println("BillController: action = " + action);
 
 		if (action != null && !action.isEmpty()) {
-			if (action.equalsIgnoreCase("bills_by_month")) {
-				forward = BILLS_BY_MONTH;
-				List<DTOBill> listBills = billDao.getBillsByMonth();
-				request.setAttribute("bills", listBills);
-			} else if(action.equalsIgnoreCase("view")) {
-				
-			} else if(action.equalsIgnoreCase("print")) {
+			if(action.equalsIgnoreCase("print")) {
 				forward = BILL_PRINT;
-				int id = Integer.parseInt(request.getParameter("id"));
-				DTOBillPrint dtoBillPrint = billDao.getBillToPrint(id);
+				int indoorId = Integer.parseInt(request.getParameter("id"));
+				DTOBillPrint dtoBillPrint = billDao.getBillToPrint(indoorId);
 				request.setAttribute("print", dtoBillPrint);
 			} else if(action.equalsIgnoreCase("receipt")) {
 				forward = BILL_RECEIPT;
-				int id = Integer.parseInt(request.getParameter("id"));
-				DTOBillReceipt dtoBillReceipt = billDao.generateReceipt(id);
+				int indoorId = Integer.parseInt(request.getParameter("id"));
+				DTOBillReceipt dtoBillReceipt = billDao.generateReceipt(indoorId);
 				request.setAttribute("receipt", dtoBillReceipt);
+			} else if (action.equalsIgnoreCase("edit")) {
+				forward = BILL_EDIT;
+				int indoorId = Integer.parseInt(request.getParameter("id"));
+				DTOBill dtoBill = billDao.getBillByIndoorId(indoorId);
+				request.setAttribute("bill", dtoBill);
 			}
 		}
 		
@@ -77,7 +76,7 @@ public class BillController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String forward = "";
 		String action = request.getParameter("action");
-		System.out.println("get action = " + action);
+		System.out.println("BillController: action = " + action);
 
 		if (action != null && !action.isEmpty()) {
 			if (action.equalsIgnoreCase("generate")) {
@@ -91,10 +90,14 @@ public class BillController extends HttpServlet {
 				DTOBill bill = billDao.generateBill(roomType, ir);
 				request.setAttribute("bill", bill);
 			} else if (action.equalsIgnoreCase("save")) {
-				forward = BILLS_BY_MONTH;
+				forward = INDOOR_REGISTER;
 				DTOBill dtoBill = populateBillFromRequest(request);
 				billDao.save(dtoBill);
-			} 
+			} else if (action.equalsIgnoreCase("edit")) {
+				forward = INDOOR_REGISTER;
+				DTOBill dtoBill = populateBillFromRequestToEdit(request);
+				billDao.update(dtoBill);
+			}
 		}
 		
 		RequestDispatcher view = request.getRequestDispatcher(forward);
@@ -120,6 +123,36 @@ public class BillController extends HttpServlet {
 		dtoBill.setIndoorRegisterId(indoorRegisterId);
 		dtoBill.setRoomType(roomType);
 		dtoBill.setSerialNo(serialNo);
+		dtoBill.setIndoorCharges(indoorCharges);
+		dtoBill.setSonography(sonography);
+		dtoBill.setConsultantCharges(consultantCharges);
+		dtoBill.setBloodTransmissionCharges(bloodTransmissionCharges);
+		dtoBill.setProcedureCharges(procedureCharges);
+		dtoBill.setOperationCharges(operationCharges);
+		dtoBill.setEpisiotomyCharges(episiotomyCharges);
+		dtoBill.setNursingCharges(nursingCharges);
+		dtoBill.setOtCharges(otCharges);
+		dtoBill.setOtherCharges(otherCharges);
+		return dtoBill;
+	}
+	
+	private DTOBill populateBillFromRequestToEdit(HttpServletRequest request) {
+		DTOBill dtoBill = new DTOBill();
+		int billId = getParam(request.getParameter("id"));
+		int indoorRegisterId = getParam(request.getParameter("indoorId"));
+		int indoorCharges = getParam(request.getParameter("indoor_hospital_charges"));
+		int sonography = getParam(request.getParameter("sonography"));
+		int consultantCharges = getParam(request.getParameter("consultant_charges"));
+		int bloodTransmissionCharges = getParam(request.getParameter("blood_transfusion_charges"));
+		int procedureCharges = getParam(request.getParameter("procedure_charges"));
+		int operationCharges = getParam(request.getParameter("operation_charges"));
+		int episiotomyCharges = getParam(request.getParameter("episiotomy_charges"));
+		int nursingCharges = getParam(request.getParameter("nursing_charges"));
+		int otCharges = getParam(request.getParameter("ot_charges"));
+		int otherCharges = getParam(request.getParameter("other_charges")); 
+		
+		dtoBill.setId(billId);
+		dtoBill.setIndoorRegisterId(indoorRegisterId);
 		dtoBill.setIndoorCharges(indoorCharges);
 		dtoBill.setSonography(sonography);
 		dtoBill.setConsultantCharges(consultantCharges);

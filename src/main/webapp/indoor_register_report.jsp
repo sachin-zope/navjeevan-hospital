@@ -26,7 +26,24 @@
 		    	"order" : []	
 		    });
 		} );
+		
+		$(document).on("click", ".generateBillDialog", function () {
+		     $(".modal-body #id").val($(this).data('id'));
+		     $(".modal-body #ipdno").val($(this).data('ipdno'));
+		     $(".modal-body #pname").html($(this).data('pname'));
+		});
 	</script>
+	
+	<style type="text/css">
+		.separator {
+			 padding-left: 2px;
+			 padding-right: 2px;
+		}
+		
+		.billlinks {
+			color: #28B463;
+		}
+	</style>
 </head>
 
 <body>
@@ -75,8 +92,10 @@
 				</form>
 			</div>
 		</div>
-		<div class="row">
-			<div>
+	</div>
+		
+		
+			<div style="margin-left: 20px; width: 90%; ">
 				<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
 					<thead>
 						<tr>
@@ -119,19 +138,66 @@
 								<td><c:out value="${ir.treatment}" /></td>
 								<td><c:out value="${ir.fees}" /></td>
 								<td><a href="IndoorRegisterController?action=edit&from=complete&id=<c:out value="${ir.id}"/>">Edit</a>
+								<span class="separotor">|</span> <a href="IndoorRegisterController?action=delete&id=<c:out value="${ir.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a>
 								<c:choose>
 									<c:when test="${(ir.fees > 0) && ir.billGenerated == false}">
-										&nbsp; <a href="IndoorRegisterController?action=bill&id=<c:out value="${ir.id}"/>&ipdno=<c:out value="${ir.ipdNo}" />">Bill</a>
+										<span class="separotor">|</span> <a data-id="<c:out value="${ir.id}"/>" data-ipdno="<c:out value="${ir.ipdNo}"/>" data-pname="<c:out value="${ir.patientName}" />" data-toggle="modal" data-target="#myModal" class="generateBillDialog">Generate Bill</a>
 									</c:when>
 									<c:when test="${ir.billGenerated == true }">
-										&nbsp; <a href="BillController?action=view&id=<c:out value="${ir.id}"/> 	">View Bill</a>
+										<br> <a class="billlinks" href="BillController?action=print&id=<c:out value="${ir.id}"/>" onclick="window.open(this.href,'_blank',
+                                   'titlebar=no, toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=500, height=900'); return false;">Print</a>
+										<span class="separotor">|</span> <a class="billlinks" href="BillController?action=receipt&id=<c:out value="${ir.id}"/>" onclick="window.open(this.href,'_blank',
+                                   'titlebar=no, toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=900, height=500'); return false;">Receipt</a>
+										<span class="separotor">|</span> <a class="billlinks" href="BillController?action=edit&id=<c:out value="${ir.id}"/> ">Edit Bill</a>
 									</c:when>
 								</c:choose>
-								 &nbsp; <a href="IndoorRegisterController?action=delete&id=<c:out value="${ir.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a></td>
+								 </td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
+			</div>
+
+	<!-- Modal -->
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Select Room Type</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" method="post" action="BillController"
+						id="bill_form">
+						<input type="hidden" name="action" value="generate"> 
+						<input type="hidden" name="id" id="id" value="" />
+						<input type="hidden" name="ipdno" id="ipdno" value="" />
+						
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Patient Name:</label>
+							<label class="col-sm-8" id="pname"></label>
+						</div>
+						
+						<div class="form-group">
+							<label for="room_type" class="col-sm-3 control-label">Room Type</label>
+							<div class="col-sm-3">
+								<select id="room_type" name="room_type" class="form-control">
+										<option value="general" selected="selected">General</option>
+										<option value="special">Special</option>
+									</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-offset-3 col-sm-10">
+								<button type="submit" class="btn btn-success">Generate Bill</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>

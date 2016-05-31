@@ -29,7 +29,6 @@ public class IndoorRegisterController extends HttpServlet {
 	private static String EDIT = "/edit_indoor_register.jsp";
 	private static String INDOOR_REPORT = "/indoor_register_report.jsp";
 	private static String INCOMPLETE_INDOOR_REPORT = "/incomplete_indoor_register_report.jsp";
-	private static String BILL = "/bill.jsp";
 	private static String PRINT_INDOOR_REGISTER = "/print_indoor_register.jsp";
 	private IndoorRegisterDao indoorRegisterDao;
 
@@ -69,14 +68,7 @@ public class IndoorRegisterController extends HttpServlet {
 				HttpSession session = request.getSession();
 				session.setAttribute("FROM", request.getParameter("from"));
 				request.setAttribute("ir", ir);
-			} else if (action.equalsIgnoreCase("bill")) {
-				forward = BILL;
-				int id = Integer.parseInt(request.getParameter("id"));
-				System.out.println("request to bill indoor register for id:" + id);
-				DTOIndoorRegister ir = indoorRegisterDao.getIndoorRegisterById(id);
-				ir.setIpdNo(Long.parseLong(request.getParameter("ipdno")));
-				request.setAttribute("ir", ir);
-		    } else if (action.equalsIgnoreCase("report")) {
+			} else if (action.equalsIgnoreCase("report")) {
 
 				String type = request.getParameter("type");
 				List<DTOIndoorRegister> indoorList = null;

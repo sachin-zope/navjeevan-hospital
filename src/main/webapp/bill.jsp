@@ -189,7 +189,7 @@ function goBack() {
 						<select id="room_type" name="room_type" class="form-control">
 								<option value="-1"></option>
 								<option value="general">General</option>
-								<option value="semi-special">Semi Special</option>
+								<option value="special">Special</option>
 							</select>
 					</div>
 				</div>

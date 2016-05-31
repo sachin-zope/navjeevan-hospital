@@ -36,17 +36,15 @@ function goBack() {
 	<jsp:include page="nav.html"></jsp:include>
 	<div class="container">
 		<div class="page-header">
-			<h3>Generate Bill</h3>
+			<h3>Edit Bill</h3>
 		</div>
 
 		<div class="row">
 			<form class="form-horizontal" method="post"
 				action="BillController" id="final_bill_form">
-				<input type="hidden" name="action" value="save">
+				<input type="hidden" name="action" value="edit">
+				<input type="hidden" name="id" value="<c:out value="${bill.id}"/>">
 				<input type="hidden" name="indoorId" value="<c:out value="${bill.indoorRegisterId}" />">
-				<input type="hidden" name="room_type" value="<c:out value="${bill.roomType}" />">
-				<input type="hidden" name="serial_no" value="<c:out value="${bill.serialNo}" />">
-				
 				<div class="form-group">
 					<label for="indoor_hospital_charges" class="col-sm-3 control-label">Indoor
 						Hospital Charges</label>
