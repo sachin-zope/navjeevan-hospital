@@ -15,16 +15,18 @@
 	<script src="js/jquery.dataTables.min.js"></script>
 	<script src="js/dataTables.bootstrap.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	
+	<script src="js/sum.js"></script>
 	<link href="css/dataTables.bootstrap.min.css" rel="stylesheet">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/common_styles.css" rel="stylesheet">
 
 	<script>
 		$(document).ready(function() {
-		    $('#example').DataTable({
+		    var indoorTable = $('#example').DataTable({
 		    	"order" : []	
 		    });
+		    
+		    $("#monthlyTotal").val(indoorTable.column(5).data().sum());
 		} );
 		
 		$(document).on("click", ".generateBillDialog", function () {
@@ -54,7 +56,7 @@
 		</div>
 		<div class="row" style="padding-bottom: 20px;">
 			<div class="col-sm-6">
-				<h4><%= session.getAttribute("REPORT_MONTH") %>, <%= session.getAttribute("REPORT_YEAR") %></h4> <a href="IndoorRegisterController?action=print" target="_blank">Print Report</a>
+				<h4><%= session.getAttribute("REPORT_MONTH") %>, <%= session.getAttribute("REPORT_YEAR") %></h4>
 			</div>
 			<div class="col-sm-6" style="text-align: right;">
 				<form class="form-inline" action="IndoorRegisterController" method="get">
@@ -90,6 +92,14 @@
 					</div>
 					<input type="submit" name="btnSubmit" class="btn btn-primary" value="Submit"/>
 				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<a href="IndoorRegisterController?action=print" target="_blank">Print Report</a>
+			</div>
+			<div class="col-sm-6" style="text-align: right;">
+				Monthly Total: <input type="text" name="monthlyTotal" id="monthlyTotal" value="" disabled="disabled"/>
 			</div>
 		</div>
 	</div>
