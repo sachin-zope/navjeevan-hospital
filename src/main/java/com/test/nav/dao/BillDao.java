@@ -150,14 +150,16 @@ public class BillDao {
 		int indoorCharges = totalDays * roomCharges;
 		int consultantCharges = totalDays * getCharges("consultant_charges");
 		int nursingCharges = totalDays * getCharges("nursing_charges");
-		
-		DeliveryRegisterDao deliveryRegisterDao = new DeliveryRegisterDao();
-		System.out.println("check#1:" + indoorRegister.getDeliveryRegisterId());
-		DTODeliveryRegister dtoDeliveryRegister = deliveryRegisterDao.getDeliveryRegisterById(indoorRegister.getDeliveryRegisterId());
-		
 		int episiotomyCharges = 0;
-		if (dtoDeliveryRegister.getEpisiotomy() != null && dtoDeliveryRegister.getEpisiotomy().equals("Given")) {
-			episiotomyCharges = getCharges("episiotomy_charges");
+		int deliveryRegisterId = indoorRegister.getDeliveryRegisterId();
+		if (deliveryRegisterId > 0) {
+			DeliveryRegisterDao deliveryRegisterDao = new DeliveryRegisterDao();
+			System.out.println("check#1:" + indoorRegister.getDeliveryRegisterId());
+			DTODeliveryRegister dtoDeliveryRegister = deliveryRegisterDao.getDeliveryRegisterById(indoorRegister.getDeliveryRegisterId());
+			
+			if (dtoDeliveryRegister.getEpisiotomy() != null && dtoDeliveryRegister.getEpisiotomy().equals("Given")) {
+				episiotomyCharges = getCharges("episiotomy_charges");
+			}
 		}
 		
 		int procedureCharges = 0;
