@@ -159,6 +159,8 @@
 										<span class="separotor">|</span> <a class="billlinks" href="BillController?action=receipt&id=<c:out value="${ir.id}"/>" onclick="window.open(this.href,'_blank',
                                    'titlebar=no, toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=900, height=500'); return false;">Receipt</a>
 										<span class="separotor">|</span> <a class="billlinks" href="BillController?action=edit&id=<c:out value="${ir.id}"/> ">Edit Bill</a>
+										<span class="separotor">|</span> <a class="billlinks" href="BillController?action=bill_receipt_print&id=<c:out value="${ir.id}" />" onclick="window.open(this.href,'_blank',
+                                   'titlebar=no, toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=800, height=900'); return false;">Print Bill Receipt</a>
 									</c:when>
 								</c:choose>
 								 </td>

@@ -26,8 +26,17 @@ td {
 }
 
 .noborder {
-border-width: 0;
+	border-width: 0;
 }
+</style>
+
+<style type="text/css" media="print">
+    .page
+    {
+     -webkit-transform: rotate(-90deg); 
+     -moz-transform:rotate(-90deg);
+     filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    }
 </style>
 
 <script type="text/javascript">
@@ -38,7 +47,7 @@ border-width: 0;
     })
 </script>
 </head>
-<body>
+<body class="page">
 	<div style="padding: 10px; text-align: center; width: 100%;">
 		<a href="javascript:window.print()" id="print">Print</a>
 	</div>

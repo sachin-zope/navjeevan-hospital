@@ -26,6 +26,7 @@ public class BillController extends HttpServlet {
 	private static final String BILL_RECEIPT = "/bill_receipt.jsp";
 	private static final String BILL_PRINT = "/bill_print.jsp";
 	private static final String BILL_EDIT = "/bill_edit.jsp";
+	private static final String BILL_RECEIPT_PRINT = "/bill_receipt_print.jsp";
 	
 	private IndoorRegisterDao indoorRegisterDao;
 	private BillDao billDao;
@@ -63,6 +64,13 @@ public class BillController extends HttpServlet {
 				int indoorId = Integer.parseInt(request.getParameter("id"));
 				DTOBill dtoBill = billDao.getBillByIndoorId(indoorId);
 				request.setAttribute("bill", dtoBill);
+			} else if (action.equalsIgnoreCase("bill_receipt_print")) {
+				forward = BILL_RECEIPT_PRINT;
+				int indoorId = Integer.parseInt(request.getParameter("id"));
+				DTOBillPrint dtoBillPrint = billDao.getBillToPrint(indoorId);
+				request.setAttribute("print", dtoBillPrint);
+				DTOBillReceipt dtoBillReceipt = billDao.generateReceipt(indoorId);
+				request.setAttribute("receipt", dtoBillReceipt);
 			}
 		}
 		

@@ -129,8 +129,13 @@ public class BillDao {
 	
 	public DTOBill generateBill(String roomType, DTOIndoorRegister indoorRegister) {
 		DTOBill dtoBill = new DTOBill();
-		long diff = indoorRegister.getDischargeDate().getTime() - indoorRegister.getAdmitDate().getTime();
-		int totalDays = (int) diff / (24 * 60 * 60 * 1000);
+		int totalDays = 0;
+		if (indoorRegister.getDischargeDate().equals(indoorRegister.getAdmitDate())) {
+			totalDays = 1;
+		} else {
+			long diff = indoorRegister.getDischargeDate().getTime() - indoorRegister.getAdmitDate().getTime();
+			totalDays = (int) diff / (24 * 60 * 60 * 1000);
+		}
 		int fees = (int) indoorRegister.getFees();
 		
 		int roomCharges;
