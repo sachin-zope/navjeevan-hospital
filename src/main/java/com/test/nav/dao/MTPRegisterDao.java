@@ -58,7 +58,7 @@ public class MTPRegisterDao {
 	public int insert(DTOMtpRegister dtoMtpRegister) throws Exception {
 		try {
 			AJMtpRegister ajMtpRegister = new AJMtpRegister();
-			ajMtpRegister.setInteger(AJMtpRegister.MTP_SERIAL_NO, generateSerialNo(dtoMtpRegister.getOperationDate()));
+			ajMtpRegister.setInteger(AJMtpRegister.MTP_SERIAL_NO, dtoMtpRegister.getMtpSerialNo());
 			ajMtpRegister.setString(AJMtpRegister.RELIGION, dtoMtpRegister.getReligion());
 			ajMtpRegister.setString(AJMtpRegister.INDICATION, dtoMtpRegister.getMindication());
 			ajMtpRegister.setString(AJMtpRegister.MTP_PROCEDURE, dtoMtpRegister.getProcedure());
@@ -86,6 +86,7 @@ public class MTPRegisterDao {
 			Base.openTransaction();
 			AJMtpRegister ajMtpRegister = new AJMtpRegister();
 			ajMtpRegister.setId(dtoMtpRegister.getId());
+			ajMtpRegister.setInteger(AJMtpRegister.MTP_SERIAL_NO, dtoMtpRegister.getMtpSerialNo());
 			ajMtpRegister.setString(AJMtpRegister.RELIGION, dtoMtpRegister.getReligion());
 			ajMtpRegister.setString(AJMtpRegister.INDICATION, dtoMtpRegister.getMindication());
 			ajMtpRegister.setString(AJMtpRegister.MTP_PROCEDURE, dtoMtpRegister.getProcedure());
@@ -108,7 +109,7 @@ public class MTPRegisterDao {
 		}
 	}
 	
-	public Integer generateSerialNo(Date operationDate) throws Exception {
+	public Integer generateSerialNo11(Date operationDate) throws Exception {
 		Integer serialNo = 0;
 		//this date will be used while updating serialno
 		Date originalOperationDate = operationDate;

@@ -88,6 +88,12 @@
 				action="MTPRegisterController" name="mtpForm">
 				<input type="hidden" name="action" value="add">
 				<div class="form-group">
+					<label for="mtpSerialNo" class="col-sm-2 control-label">MTP Serial No.: </label>
+					<div class="col-sm-2">
+						<input type="number" class="form-control" id="mtpSerialNo" name="mtpSerialNo" min="1">
+					</div>
+				</div>
+				<div class="form-group">
 					<label for="opdDate" class="col-sm-2 control-label">OPD
 						Date</label>
 					<div class="col-sm-4">

@@ -415,6 +415,12 @@ $(document).ready(function () {
 
 				<div id="treatmentMTP">
 					<div class="form-group">
+						<label for="mtpSerialNo" class="col-sm-2 control-label">MTP Serial No.: </label>
+						<div class="col-sm-2">
+							<input type="number" class="form-control" id="mtpSerialNo" name="mtpSerialNo" min="1">
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="durationOfPregnancy" class="col-sm-2 control-label">Duration of Pregnancy</label>
 						<div class="col-sm-2">
 							<input type="number" class="form-control" id="durationOfPregnancy" name="durationOfPregnancy" min="1" max="40">
@@ -521,6 +527,12 @@ $(document).ready(function () {
 				</div>
 				
 				<div id="treatmentMTPTubectomy">
+					<div class="form-group">
+						<label for="MTmtpSerialNo" class="col-sm-2 control-label">MTP Serial No.: </label>
+						<div class="col-sm-2">
+							<input type="number" class="form-control" id="MTmtpSerialNo" name="MTmtpSerialNo" min="1">
+						</div>
+					</div>
 					<div class="form-group">
 						<label for="MTdurationOfPregnancy" class="col-sm-2 control-label">Duration of Pregnancy</label>
 						<div class="col-sm-2">

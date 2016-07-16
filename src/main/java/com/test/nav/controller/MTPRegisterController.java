@@ -121,6 +121,14 @@ public class MTPRegisterController extends HttpServlet {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 		DTOMtpRegister mtpRegister = new DTOMtpRegister();
 		mtpRegister.setDurationOfPregnancy(Integer.parseInt(request.getParameter("durationOfPregnancy")));
+		String strMtpSerialNo = request.getParameter("mtpSerialNo");
+		if (strMtpSerialNo != null && !strMtpSerialNo.isEmpty()) {
+			try {
+				mtpRegister.setMtpSerialNo(Integer.parseInt(strMtpSerialNo));
+			} catch (NumberFormatException nfe) {
+				mtpRegister.setMtpSerialNo(0);
+			}
+		}
 		mtpRegister.setReligion(request.getParameter("religion"));
 		mtpRegister.setMarried(request.getParameter("married"));
 		mtpRegister.setMindication(request.getParameter("mindication"));
@@ -157,6 +165,14 @@ public class MTPRegisterController extends HttpServlet {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 		DTOMtpRegister mtpRegister = new DTOMtpRegister();
 		mtpRegister.setDurationOfPregnancy(Integer.parseInt(request.getParameter("durationOfPregnancy")));
+		String strMtpSerialNo = request.getParameter("mtpSerialNo");
+		if (strMtpSerialNo != null && !strMtpSerialNo.isEmpty()) {
+			try {
+				mtpRegister.setMtpSerialNo(Integer.parseInt(strMtpSerialNo));
+			} catch (NumberFormatException nfe) {
+				mtpRegister.setMtpSerialNo(0);
+			}
+		}
 		mtpRegister.setReligion(request.getParameter("religion"));
 		mtpRegister.setMarried(request.getParameter("married"));
 		mtpRegister.setMindication(request.getParameter("mindication"));
