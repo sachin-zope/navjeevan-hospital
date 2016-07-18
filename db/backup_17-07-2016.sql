@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.6.26, for Win32 (x86)
 --
--- Host: localhost    Database: navjeevandb
+-- Host: localhost    Database: navjeevan
 -- ------------------------------------------------------
 -- Server version	5.6.26-log
 
@@ -14,6 +14,34 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `bill`
+--
+
+DROP TABLE IF EXISTS `bill`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bill` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `indoor_register_id` int(11) NOT NULL,
+  `serial_no` int(11) NOT NULL,
+  `room_type` varchar(50) NOT NULL,
+  `indoor_hospital_charges` int(11) DEFAULT NULL,
+  `sonography` int(11) DEFAULT NULL,
+  `consultant_charges` int(11) DEFAULT NULL,
+  `blood_transfusion_charges` int(11) DEFAULT NULL,
+  `procedure_charges` int(11) DEFAULT NULL,
+  `operation_charges` int(11) DEFAULT NULL,
+  `episiotomy_charges` int(11) DEFAULT NULL,
+  `nursing_charges` int(11) DEFAULT NULL,
+  `ot_charges` int(11) DEFAULT NULL,
+  `other_charges` int(11) DEFAULT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `delivery_register`
