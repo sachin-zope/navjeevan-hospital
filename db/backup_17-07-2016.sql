@@ -100,6 +100,7 @@ CREATE TABLE `indoor_register` (
   `mtp_register_id` int(11) DEFAULT NULL,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `is_bill_generated` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `indoor_ot_id_idx` (`ot_register_id`),
   KEY `mtp_fk_idx` (`mtp_register_id`),
