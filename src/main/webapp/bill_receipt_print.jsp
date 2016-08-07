@@ -245,7 +245,7 @@ td {
 				<table border="0" width="100%">
 					<tr>
 						<td width="25%" valign="top">Rs. In Words :</td>
-						<td width="75%" class="inwords"><c:out value="${print.inWords}" /></td>
+						<td width="75%" class="inwords"><c:out value="${print.inWords}" /> ONLY</td>
 					</tr>
 				</table>
 			</td>
@@ -277,8 +277,9 @@ td {
 			<td>
 				<table class="noborder" width="100%">
 					<tr>
-						<td width="50%"><span style="font-size: 18px;"><strong>Navjeevan Hospital</strong></span></td>
-						<td width="50%" align="right"><span style="font-size: 16px;"><strong>Dr. Narendra Zope</strong></span></td>
+						<td width="100%" colspan="2" align="center"><span style="font-size: 18px;"><strong>Navjeevan Hospital</strong></span>
+						<br><span style="font-size: 16px;">Address: Opp. Vani Mangal Karyalaya, Kailas Nagar, Bhadgaon Road Chalisgaon 424101.
+						<br>Phone: 02589 224010</span></td>
 					</tr>
 				</table>
 			</td>
@@ -288,7 +289,7 @@ td {
 			<td>
 				<table class="noborder" width="100%">
 					<tr>
-						<td width="50%"><strong>Receipt No.:</strong></td>
+						<td width="50%"><strong>Receipt No.:</strong> <c:out value="${receipt.receiptNo}" /></td>
 						<td width="50%" align="right"><strong>Date:</strong> <fmt:formatDate pattern="dd/MM/yyyy" value="${receipt.receiptDate}" /></td>
 					</tr>
 				</table>
@@ -315,7 +316,7 @@ td {
 					
 					<tr>
 						<td width="30%"><strong>IN WORDS RUPEES :</strong></td>
-						<td width="70%" style="border-bottom: #000000 solid 1px;"><c:out value="${receipt.inWords}" /></td>
+						<td width="70%" style="border-bottom: #000000 solid 1px;"><c:out value="${receipt.inWords}" /> ONLY</td>
 						<td width="10%"></td>
 					</tr>
 					

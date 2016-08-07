@@ -53,7 +53,7 @@ public class BillTransformer {
 	public DTOBillPrint tranformBillToPrint(AJBill ajBill, AJIndoorRegister ajIndoorRegister, Date operationDate) {
 		DTOBillPrint dtoBillPrint = new DTOBillPrint();
 		dtoBillPrint.setBillNo(ajBill.getLong(AJBill.SERIAL_NO));
-		dtoBillPrint.setBillDate(new Date());
+		dtoBillPrint.setBillDate(ajIndoorRegister.getDate(AJIndoorRegister.DISCHARGE_DATE));
 		
 		dtoBillPrint.setPatientName(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_NAME).trim());
 		dtoBillPrint.setSex(ajIndoorRegister.getString(AJIndoorRegister.GENDER).toUpperCase());
@@ -86,9 +86,10 @@ public class BillTransformer {
 		DTOBill dtoBill = tranform(ajBill);
 		int total = dtoBill.getTotal();
 		billReceipt.setTotalBill(total);
+		billReceipt.setReceiptNo(ajBill.getInteger(AJBill.SERIAL_NO));
 		billReceipt.setInWords(NumberToWord.convert(total).toUpperCase());
 		billReceipt.setPatientName(ajIndoorRegister.getString(AJIndoorRegister.PATIENT_NAME));
-		billReceipt.setReceiptDate(new Date());
+		billReceipt.setReceiptDate(ajIndoorRegister.getDate(AJIndoorRegister.DISCHARGE_DATE));
 		return billReceipt;
 	}
 }
