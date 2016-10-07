@@ -12,7 +12,7 @@
 
 <style type="text/css">
 body {
-	font-size: 11px;
+	font-size: 12px;
 	margin: 0 auto;
 }
 
@@ -22,7 +22,7 @@ table {
 } 
 
 td {
-	padding: 5px;
+	padding: 3px;
 }
 
 .particularsHeading {
@@ -99,7 +99,9 @@ td {
 			<td>
 				<table border="0" width="100%">
 					<tr>
-						<td width="100%" align="center">HOSPITAL BILL</td>
+						<td width="100%" colspan="2" align="center"><span style="font-size: 18px;"><strong>Navjeevan Hospital</strong></span>
+						<br><span style="font-size: 16px;">Address: Opp. Vani Mangal Karyalaya, Kailas Nagar, Bhadgaon Road Chalisgaon 424101.
+						<br>Phone: 02589 224010</span></td>
 					</tr>
 				</table>
 			</td>
@@ -182,54 +184,65 @@ td {
 						<td class="amount"> <c:out value="${print.indoorCharges}" /> </td>
 					</tr>
 					
-					<tr>
-						<td class="particular">Sonography</td>
-						<td class="amount"><c:out value="${print.sonography}" /></td>
-					</tr>
+					<c:if test="${print.sonography > 0}">
+						<tr>
+							<td class="particular">Sonography</td>
+							<td class="amount"><c:out value="${print.sonography}" /></td>
+						</tr>
+					</c:if>
 					
-					<tr>
-						<td class="particular">Consultant Charges</td>
-						<td class="amount"><c:out value="${print.consultantCharges}" /></td>
-					</tr>
+					<c:if test="${print.consultantCharges > 0}">
+						<tr>
+							<td class="particular">Consultant Charges</td>
+							<td class="amount"><c:out value="${print.consultantCharges}" /></td>
+						</tr>
+					</c:if>
 					
-					<tr>
-						<td class="particular">Blood Transfusion Charges</td>
-						<td class="amount"><c:out value="${print.bloodTransmissionCharges}" /></td>
-					</tr>
-					
-					<tr>
-						<td class="particular">Procedure Charges</td>
-						<td class="amount"><c:out value="${print.procedureCharges}" /></td>
-					</tr>
-					
-					<tr>
-						<td class="particular">Operation Charges</td>
-						<td class="amount"><c:out value="${print.operationCharges}" /></td>
-					</tr>
-					
-					<tr>
-						<td class="particular">Episiotomy Charges</td>
-						<td class="amount"><c:out value="${print.episiotomyCharges}" /></td>
-					</tr>
-					
-					<tr>
-						<td class="particular">Nursing Charges</td>
-						<td class="amount"><c:out value="${print.nursingCharges}" /></td>
-					</tr>
-					
-					<tr>
-						<td class="particular">O.T. Charges</td>
-						<td class="amount"><c:out value="${print.otCharges}" /></td>
-					</tr>
-					
+					<c:if test="${print.bloodTransmissionCharges > 0}">
+						<tr>
+							<td class="particular">Blood Transfusion Charges</td>
+							<td class="amount"><c:out value="${print.bloodTransmissionCharges}" /></td>
+						</tr>
+					</c:if>
+
+					<c:if test="${print.procedureCharges > 0}">
+						<tr>
+							<td class="particular">Procedure Charges</td>
+							<td class="amount"><c:out value="${print.procedureCharges}" /></td>
+						</tr>
+					</c:if>
+
+					<c:if test="${print.operationCharges > 0}">
+						<tr>
+							<td class="particular">Operation Charges</td>
+							<td class="amount"><c:out value="${print.operationCharges}" /></td>
+						</tr>
+					</c:if>
+
+					<c:if test="${print.episiotomyCharges > 0}">
+						<tr>
+							<td class="particular">Episiotomy Charges</td>
+							<td class="amount"><c:out value="${print.episiotomyCharges}" /></td>
+						</tr>
+					</c:if>
+
+					<c:if test="${print.nursingCharges > 0}">
+						<tr>
+							<td class="particular">Nursing Charges</td>
+							<td class="amount"><c:out value="${print.nursingCharges}" /></td>
+						</tr>
+					</c:if>
+
+					<c:if test="${print.otCharges > 0}">
+						<tr>
+							<td class="particular">O.T. Charges</td>
+							<td class="amount"><c:out value="${print.otCharges}" /></td>
+						</tr>
+					</c:if>
+
 					<tr>
 						<td class="particular">Other Charges</td>
 						<td class="amount"><c:out value="${print.otherCharges}" /></td>
-					</tr>
-					
-					<tr>
-						<td class="particular">&nbsp;</td>
-						<td class="amount">&nbsp;</td>
 					</tr>
 					
 					<tr>
@@ -263,7 +276,7 @@ td {
 			<td>
 				<table border="0" width="100%">
 					<tr>
-						<td style="text-align: right; padding-right: 10px;">NAVJEEVAN HOSPITAL</td>
+						<td style="text-align: right; padding-top: 20px; padding-right: 10px;">NAVJEEVAN HOSPITAL</td>
 					</tr>
 				</table>
 			</td>
