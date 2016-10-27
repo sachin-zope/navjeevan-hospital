@@ -39,6 +39,8 @@ public class BillTransformer {
 		dtoBill.setNursingCharges(ajBill.getInteger(AJBill.NURSING_CHARGES));
 		dtoBill.setOtCharges(ajBill.getInteger(AJBill.OT_CHARGES));
 		dtoBill.setOtherCharges(ajBill.getInteger(AJBill.OTHER_CHARGES));
+		dtoBill.setBillType(ajBill.getString(AJBill.BILL_TYPE));
+		dtoBill.setChequeNo(ajBill.getString(AJBill.CHEQUE_NO));
 		dtoBill.setTotal(calculateTotal(dtoBill));
 		return dtoBill;
 	}
@@ -74,6 +76,8 @@ public class BillTransformer {
 		dtoBillPrint.setNursingCharges(dtoBill.getNursingCharges());
 		dtoBillPrint.setOtCharges(dtoBill.getOtCharges());
 		dtoBillPrint.setOtherCharges(dtoBill.getOtherCharges());
+		dtoBillPrint.setBillType(dtoBill.getBillType());
+		dtoBillPrint.setChequeNo(dtoBill.getChequeNo());
 		int total = dtoBill.getTotal();
 		dtoBillPrint.setTotal(total);
 		dtoBillPrint.setInWords(NumberToWord.convert(total).toUpperCase());

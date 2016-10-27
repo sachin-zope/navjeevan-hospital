@@ -90,12 +90,14 @@ public class BillController extends HttpServlet {
 			if (action.equalsIgnoreCase("generate")) {
 				forward = BILL_FINAL;
 				String roomType = request.getParameter("room_type");
+				String billType = request.getParameter("bill_type");
+				String chequeNo = request.getParameter("cheque_no");
 				int id = Integer.parseInt(request.getParameter("id"));
 				System.out.println("Generating bill for id:" + id + " and RoomType:" + roomType);
 				
 				DTOIndoorRegister ir = indoorRegisterDao.getIndoorRegisterById(id);
 				ir.setIpdNo(Long.parseLong(request.getParameter("ipdno")));
-				DTOBill bill = billDao.generateBill(roomType, ir);
+				DTOBill bill = billDao.generateBill(roomType, ir, billType, chequeNo);
 				request.setAttribute("bill", bill);
 			} else if (action.equalsIgnoreCase("save")) {
 				forward = INDOOR_REGISTER;
@@ -127,6 +129,8 @@ public class BillController extends HttpServlet {
 		int nursingCharges = getParam(request.getParameter("nursing_charges"));
 		int otCharges = getParam(request.getParameter("ot_charges"));
 		int otherCharges = getParam(request.getParameter("other_charges")); 
+		String billType = request.getParameter("bill_type");
+		String chequeNo = request.getParameter("cheque_no");
 		
 		dtoBill.setIndoorRegisterId(indoorRegisterId);
 		dtoBill.setRoomType(roomType);
@@ -141,6 +145,8 @@ public class BillController extends HttpServlet {
 		dtoBill.setNursingCharges(nursingCharges);
 		dtoBill.setOtCharges(otCharges);
 		dtoBill.setOtherCharges(otherCharges);
+		dtoBill.setBillType(billType);
+		dtoBill.setChequeNo(chequeNo);
 		return dtoBill;
 	}
 	

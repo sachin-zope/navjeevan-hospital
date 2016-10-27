@@ -46,6 +46,8 @@ public class BillDao {
 			ajBill.setInteger(AJBill.NURSING_CHARGES, dtoBill.getNursingCharges());
 			ajBill.setInteger(AJBill.OT_CHARGES, dtoBill.getOtCharges());
 			ajBill.setInteger(AJBill.OTHER_CHARGES, dtoBill.getOtherCharges());
+			ajBill.setString(AJBill.BILL_TYPE, dtoBill.getBillType());
+			ajBill.setString(AJBill.CHEQUE_NO, dtoBill.getChequeNo());
 			
 			double total = dtoBill.getIndoorCharges() + dtoBill.getSonography() + dtoBill.getConsultantCharges()
 					+ dtoBill.getBloodTransmissionCharges() + dtoBill.getProcedureCharges()
@@ -127,7 +129,7 @@ public class BillDao {
 		return null;
 	}
 	
-	public DTOBill generateBill(String roomType, DTOIndoorRegister indoorRegister) {
+	public DTOBill generateBill(String roomType, DTOIndoorRegister indoorRegister, String billType, String chequeNo) {
 		DTOBill dtoBill = new DTOBill();
 		int totalDays = 0;
 		if (indoorRegister.getDischargeDate().equals(indoorRegister.getAdmitDate())) {
@@ -239,6 +241,8 @@ public class BillDao {
 		dtoBill.setEpisiotomyCharges(episiotomyCharges);
 		dtoBill.setOtCharges(otCharges);
 		dtoBill.setOtherCharges(otherCharges);
+		dtoBill.setBillType(billType);
+		dtoBill.setChequeNo(chequeNo);
 		int total = indoorCharges + consultantCharges + procedureCharges + operationCharges + nursingCharges + episiotomyCharges + otCharges;
 		dtoBill.setTotal(total);
 		return dtoBill;

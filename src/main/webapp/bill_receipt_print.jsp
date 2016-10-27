@@ -100,8 +100,11 @@ td {
 				<table border="0" width="100%">
 					<tr>
 						<td width="100%" colspan="2" align="center"><span style="font-size: 18px;"><strong>Navjeevan Hospital</strong></span>
-						<br><span style="font-size: 16px;">Address: Opp. Vani Mangal Karyalaya, Kailas Nagar, Bhadgaon Road Chalisgaon 424101.
-						<br>Phone: 02589 224010</span></td>
+						<br><span style="font-size: 16px;">Address: Opp. Wani Mangal Karyalaya, Kailas Nagar, Bhadgaon Road Chalisgaon 424101.</span></td>
+					</tr>
+					<tr>
+						<td width="50%" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;">Phone: 02589 224010</span></td>
+						<td width="50%" align="right"><span style="font-size: 16px;">Registration No.: 247</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					</tr>
 				</table>
 			</td>
@@ -291,7 +294,7 @@ td {
 				<table class="noborder" width="100%">
 					<tr>
 						<td width="100%" colspan="2" align="center"><span style="font-size: 18px;"><strong>Navjeevan Hospital</strong></span>
-						<br><span style="font-size: 16px;">Address: Opp. Vani Mangal Karyalaya, Kailas Nagar, Bhadgaon Road Chalisgaon 424101.
+						<br><span style="font-size: 16px;">Address: Opp. Wani Mangal Karyalaya, Kailas Nagar, Bhadgaon Road Chalisgaon 424101.
 						<br>Phone: 02589 224010</span></td>
 					</tr>
 				</table>
@@ -329,18 +332,16 @@ td {
 					
 					<tr>
 						<td width="30%"><strong>IN WORDS RUPEES :</strong></td>
-						<td width="70%" style="border-bottom: #000000 solid 1px;"><c:out value="${receipt.inWords}" /> ONLY</td>
+						<td width="70%" style="border-bottom: #000000 solid 1px;"><c:out value="${receipt.inWords}" /> ONLY (By <c:out value="${print.billType}" />)
+						<c:if test="${print.billType == 'Cheque'}">
+						No: <c:out value="${print.chequeNo}" />
+						</c:if>
+						</td>
 						<td width="10%"></td>
 					</tr>
 					
 					<tr>
 						<td width="30%"><strong>BY CASH / CHEQUE / DRAFT NO :</strong></td>
-						<td width="70%" style="border-bottom: #000000 solid 1px;"></td>
-						<td width="10%"></td>
-					</tr>
-					
-					<tr>
-						<td width="30%"><strong>FOR :</strong></td>
 						<td width="70%" style="border-bottom: #000000 solid 1px;"></td>
 						<td width="10%"></td>
 					</tr>

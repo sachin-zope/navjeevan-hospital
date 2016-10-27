@@ -24,6 +24,8 @@ public class DTOBillPrint {
 	private int nursingCharges;
 	private int otCharges;
 	private int otherCharges;
+	private String billType;
+	private String chequeNo;
 
 	private int total;
 	private String inWords;
@@ -178,6 +180,22 @@ public class DTOBillPrint {
 
 	public void setOtherCharges(int otherCharges) {
 		this.otherCharges = otherCharges;
+	}
+
+	public String getBillType() {
+		return billType;
+	}
+
+	public void setBillType(String billType) {
+		this.billType = billType;
+	}
+
+	public String getChequeNo() {
+		return chequeNo;
+	}
+
+	public void setChequeNo(String chequeNo) {
+		this.chequeNo = chequeNo;
 	}
 
 	public int getTotal() {

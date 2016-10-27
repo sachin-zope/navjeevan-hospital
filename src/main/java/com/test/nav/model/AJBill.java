@@ -22,4 +22,6 @@ public class AJBill extends Model{
 	public static final String OTHER_CHARGES = "other_charges";
 	public static final String CREATE_DATE = "create_date";
 	public static final String UPDATE_DATE = "update_date";
+	public static final String BILL_TYPE = "bill_type";
+	public static final String CHEQUE_NO = "cheque_no";
 }

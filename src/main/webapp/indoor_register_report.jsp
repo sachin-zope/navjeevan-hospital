@@ -201,6 +201,25 @@
 									</select>
 							</div>
 						</div>
+						
+						<div class="form-group">
+							<label for="bill_type" class="col-sm-3 control-label">Bill By</label>
+							<div class="col-sm-3">
+								<select id="bill_type" name="bill_type" class="form-control">
+										<option value="Cash" selected="selected">Cash</option>
+										<option value="Cheque">Cheque</option>
+										<option value="NEFT">NEFT</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="cheque_no" class="col-sm-3 control-label">Cheque No.:</label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" id="cheque_no"
+									name="cheque_no">
+							</div>
+						</div>
 
 						<div class="form-group">
 							<div class="col-sm-offset-3 col-sm-10">

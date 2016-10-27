@@ -46,6 +46,8 @@ function goBack() {
 				<input type="hidden" name="indoorId" value="<c:out value="${bill.indoorRegisterId}" />">
 				<input type="hidden" name="room_type" value="<c:out value="${bill.roomType}" />">
 				<input type="hidden" name="serial_no" value="<c:out value="${bill.serialNo}" />">
+				<input type="hidden" name="bill_type" value="<c:out value="${bill.billType}" />">
+				<input type="hidden" name="cheque_no" value="<c:out value="${bill.chequeNo}" />">
 				
 				<div class="form-group">
 					<label for="indoor_hospital_charges" class="col-sm-3 control-label">Indoor
