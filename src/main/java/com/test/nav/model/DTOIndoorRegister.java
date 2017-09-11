@@ -22,6 +22,7 @@ public class DTOIndoorRegister {
 	private int deliveryRegisterId;
 	private int mtpRegisterId;
 	private int otRegisterId;
+	private int drId;
 	private Date createDate;
 	private Date updateDate;
 
@@ -170,6 +171,14 @@ public class DTOIndoorRegister {
 
 	public void setOtRegisterId(int otRegisterId) {
 		this.otRegisterId = otRegisterId;
+	}
+	
+	public int getDrId() {
+		return drId;
+	}
+
+	public void setDrId(int drId) {
+		this.drId = drId;
 	}
 
 	public Date getCreateDate() {

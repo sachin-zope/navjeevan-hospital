@@ -23,12 +23,18 @@ public class AJIndoorRegister extends Model{
 	public static final String DELIVERY_REGISTER_ID = "delivery_register_id";
 	public static final String MTP_REGISTER_ID = "mtp_register_id";
 	public static final String OT_REGISTER_ID = "ot_register_id";
+	public static final String DR_ID = "dr_id";
 	public static final String CREATE_DATE = "create_date";
 	public static final String UPDATE_DATE = "update_date";
 	
+	public static String SELECT_BY_MONTH_DR = "SELECT id, admit_date, discharge_date, patient_name, "
+			+ "gender, address, age, diagnosis, treatment, fees, is_bill_generated, remarks, delivery_register_id, ot_register_id, "
+			+ "mtp_register_id, dr_id FROM indoor_register WHERE date_format(discharge_date, '%b') = ? and "
+			+ "date_format(discharge_date, '%Y') = ? and dr_id = ? order by discharge_date asc";
+	
 	public static String SELECT_BY_MONTH = "SELECT id, admit_date, discharge_date, patient_name, "
 			+ "gender, address, age, diagnosis, treatment, fees, is_bill_generated, remarks, delivery_register_id, ot_register_id, "
-			+ "mtp_register_id FROM indoor_register WHERE date_format(discharge_date, '%b') = ? and "
+			+ "mtp_register_id, dr_id FROM indoor_register WHERE date_format(discharge_date, '%b') = ? and "
 			+ "date_format(discharge_date, '%Y') = ? order by discharge_date asc";
 	
 	public static String SELECT_INCOMPLETE = "SELECT id, admit_date, discharge_date, patient_name, "

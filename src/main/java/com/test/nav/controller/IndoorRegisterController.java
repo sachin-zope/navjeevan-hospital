@@ -59,7 +59,9 @@ public class IndoorRegisterController extends HttpServlet {
 				HttpSession session = request.getSession();
 				String month = session.getAttribute("REPORT_MONTH").toString();
 				String year = session.getAttribute("REPORT_YEAR").toString();
-				request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year));
+				String dr = session.getAttribute("REPORT_DR").toString();
+				request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year, dr));
+				request.setAttribute("drName", getDrName(dr));
 			} else if (action.equalsIgnoreCase("edit")) {
 				forward = EDIT;
 				int id = Integer.parseInt(request.getParameter("id"));
@@ -68,6 +70,19 @@ public class IndoorRegisterController extends HttpServlet {
 				HttpSession session = request.getSession();
 				session.setAttribute("FROM", request.getParameter("from"));
 				request.setAttribute("ir", ir);
+			} else if (action.equalsIgnoreCase("assign")) {
+				forward = INDOOR_REPORT;
+				int id = Integer.parseInt(request.getParameter("id"));
+				int drId = Integer.parseInt(request.getParameter("dr"));
+				System.out.println("Request to assign indoor register of id:" + id + " to Dr:" + drId);
+				indoorRegisterDao.assign(id, drId);
+				
+				HttpSession session = request.getSession();
+				String month = session.getAttribute("REPORT_MONTH").toString();
+				String year = session.getAttribute("REPORT_YEAR").toString();
+				String dr = session.getAttribute("REPORT_DR").toString();
+				request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year, dr));
+				request.setAttribute("drName", getDrName(dr));
 			} else if (action.equalsIgnoreCase("report")) {
 
 				String type = request.getParameter("type");
@@ -76,7 +91,8 @@ public class IndoorRegisterController extends HttpServlet {
 					if (type.equalsIgnoreCase("complete")) {
 						String month = request.getParameter("month");
 						String year = request.getParameter("year");
-
+						String dr = request.getParameter("dr");
+						
 						if (month == null || month.isEmpty()) {
 							month = AppUtil.getCurrentMonth();
 						}
@@ -84,13 +100,17 @@ public class IndoorRegisterController extends HttpServlet {
 						if (year == null || year.isEmpty()) {
 							year = AppUtil.getCurrentYear().toString();
 						}
-						System.out.println("Month:" + month + " Year: " + year);
+						System.out.println("Month:" + month + " Year: " + year + " Dr: " + dr);
 						HttpSession session = request.getSession();
+						session.removeAttribute("REPORT_DR");
+						
 						session.setAttribute("REPORT_MONTH", month);
 						session.setAttribute("REPORT_YEAR", year);
+						session.setAttribute("REPORT_DR", dr);
 						forward = INDOOR_REPORT;
-						indoorList = indoorRegisterDao.getIndoorRegistersByMonth(month, year);
+						indoorList = indoorRegisterDao.getIndoorRegistersByMonth(month, year, dr);
 						session.setAttribute("INDOOR_LIST", indoorList);
+						request.setAttribute("drName", getDrName(dr));
 					} else if (type.equalsIgnoreCase("incomplete")) {
 						indoorList = indoorRegisterDao.getIncompleteIndoorRegister();
 						forward = INCOMPLETE_INDOOR_REPORT;
@@ -98,6 +118,7 @@ public class IndoorRegisterController extends HttpServlet {
 				}
 
 				request.setAttribute("irs", indoorList);
+				
 			} else if (action.equalsIgnoreCase("print")) { 
 				forward = PRINT_INDOOR_REGISTER;
 				HttpSession session = request.getSession();
@@ -164,14 +185,16 @@ public class IndoorRegisterController extends HttpServlet {
 				HttpSession session = request.getSession();
 				String month = session.getAttribute("REPORT_MONTH").toString();
 				String year = session.getAttribute("REPORT_YEAR").toString();
+				String dr = session.getAttribute("REPORT_DR").toString();
 				
 				String from = session.getAttribute("FROM") != null ? session.getAttribute("FROM").toString() : null;
 				if(from == null) {
 					forward = INDOOR_REPORT;
-					request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year));
+					request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year, dr));
 				} else if (from.equalsIgnoreCase("complete")) {
 					forward = INDOOR_REPORT;
-					request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year));
+					request.setAttribute("irs", indoorRegisterDao.getIndoorRegistersByMonth(month, year, dr));
+					request.setAttribute("drName", getDrName(dr));
 				} else {
 					forward = INCOMPLETE_INDOOR_REPORT;
 					request.setAttribute("irs", indoorRegisterDao.getIncompleteIndoorRegister());
@@ -387,6 +410,18 @@ public class IndoorRegisterController extends HttpServlet {
 		} else {
 			ir.setDiagnosis(diagnosis);
 		}
+		
+		String drId = request.getParameter("drId");
+		if (drId != null) {
+			try {
+				int intId = Integer.parseInt(drId);
+				if (intId > 0) {
+					ir.setDrId(intId);
+				}
+			} catch (NumberFormatException nfe) {
+				System.out.println("invalid doctor id");
+			}
+		}
 
 		ir.setRemarks(request.getParameter("remarks"));
 
@@ -396,5 +431,19 @@ public class IndoorRegisterController extends HttpServlet {
 		}
 
 		return ir;
+	}
+	
+	private String getDrName(String dr) {
+		try {
+			if (dr.equalsIgnoreCase("1")) {
+				return "Dr. Narendra";
+			} else if (dr.equalsIgnoreCase("2")) {
+				return "Dr. Smita";
+			} else {
+				return "";
+			}
+		} catch (Exception e) {
+			return "";
+		}
 	}
 }

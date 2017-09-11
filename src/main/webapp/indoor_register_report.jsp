@@ -45,6 +45,10 @@
 		.billlinks {
 			color: #28B463;
 		}
+		
+		.drtext {
+			color: orange;
+		}
 	</style>
 </head>
 
@@ -52,7 +56,7 @@
 	<jsp:include page="nav.html"></jsp:include>
 	<div class="container">
 		<div class="page-header">
-			<h3>Indoor Register Report</h3>
+			<h3>Indoor Register Report</h3> <c:out value="${drName}"></c:out>
 		</div>
 		<div class="row" style="padding-bottom: 20px;">
 			<div class="col-sm-6">
@@ -62,6 +66,7 @@
 				<form class="form-inline" action="IndoorRegisterController" method="get">
 					<input type="hidden" name="action" value="report">
 					<input type="hidden" name="type" value="complete">
+					<input type="hidden" name="dr" value="<%= session.getAttribute("REPORT_DR") %>">
 					<div class="form-group">
 						<select name="month" class="form-control">
 							<option value="">Select Month</option>
@@ -149,6 +154,19 @@
 								<td><c:out value="${ir.fees}" /></td>
 								<td><a href="IndoorRegisterController?action=edit&from=complete&id=<c:out value="${ir.id}"/>">Edit</a>
 								<span class="separotor">|</span> <a href="IndoorRegisterController?action=delete&id=<c:out value="${ir.id}"/>"  onclick="return confirm('Are you sure you want to delete this entry?');">Delete</a>
+								<c:choose>
+									<c:when test="${(ir.drId == 0)}">
+										<span class="separotor">|</span> <a href="IndoorRegisterController?action=assign&id=<c:out value="${ir.id}"/>&dr=1"  onclick="return confirm('Assign to Dr. Narendra?');">Dr. Narendra</a>
+										<span class="separotor">|</span> <a href="IndoorRegisterController?action=assign&id=<c:out value="${ir.id}"/>&dr=2"  onclick="return confirm('Assign to Dr. Smita?');">Dr. Smita</a>
+									</c:when>
+									<c:when test="${(ir.drId == 1) }">
+										<span class="separotor">|</span> <span class = "drtext">Dr. Narendra</span>
+									</c:when>
+									<c:when test="${(ir.drId == 2) }">
+										<span class="separotor">|</span> <span class = "drtext">Dr. Smita</span>
+									</c:when>
+								</c:choose>
+								
 								<c:choose>
 									<c:when test="${(ir.fees > 0) && ir.billGenerated == false}">
 										<span class="separotor">|</span> <a data-id="<c:out value="${ir.id}"/>" data-ipdno="<c:out value="${ir.ipdNo}"/>" data-pname="<c:out value="${ir.patientName}" />" data-toggle="modal" data-target="#myModal" class="generateBillDialog">Generate Bill</a>

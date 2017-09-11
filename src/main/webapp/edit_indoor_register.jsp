@@ -307,6 +307,31 @@ $(document).ready(function () {
 							name="remarks" placeholder="Remarks" value="<c:out value="${ir.remarks}" />">
 					</div>
 				</div>
+				
+				<div class="form-group">
+					<label for="dr" class="col-sm-2 control-label">Doctor</label>
+					<div class="col-sm-3">
+						<select name="drId" id="drId" class="form-control">
+							<c:choose>
+								<c:when test="${(ir.drId == 0)}">
+									<option value="-1">Select Doctor</option>
+									<option value="1">Dr. Narendra</option>
+									<option value="2">Dr. Smita</option>
+								</c:when>
+								<c:when test="${(ir.drId == 1) }">
+									<option value="-1">Select Doctor</option>
+									<option value="1" selected="selected">Dr. Narendra</option>
+									<option value="2">Dr. Smita</option>
+								</c:when>
+								<c:when test="${(ir.drId == 2) }">
+									<option value="-1">Select Doctor</option>
+									<option value="1">Dr. Narendra</option>
+									<option value="2" selected="selected">Dr. Smita</option>
+								</c:when>
+							</c:choose>
+						</select>
+					</div>
+				</div>
 
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">

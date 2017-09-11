@@ -58,16 +58,32 @@ public class IndoorRegisterDao {
 		}
 	}
 
-	public List<DTOIndoorRegister> getIndoorRegistersByMonth(String month, String year) {
+	public List<DTOIndoorRegister> getIndoorRegistersByMonth(String month, String year, String dr) {
 		Connection conn = null;
 		try {
 			conn = DbUtil.getConnection();
 			conn.setReadOnly(true);
 			Base.openTransaction();
 
-			System.out.println("request to fetch report");
-			LazyList<AJIndoorRegister> ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_BY_MONTH, month,
-					year);
+			LazyList<AJIndoorRegister> ajIndoorRegisters = null;
+			System.out.println("dr = " + dr);
+			boolean drFilter = false;
+			int drId = 0;
+			if (dr != null && !dr.isEmpty()) {
+				try {
+					drId = Integer.parseInt(dr);
+					drFilter = true;
+				} catch (NumberFormatException nfe) {
+					drFilter = false;
+				}
+			}
+			
+			if (drFilter) {
+				ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_BY_MONTH_DR, month, year, drId);
+			} else {
+				ajIndoorRegisters = AJIndoorRegister.findBySQL(AJIndoorRegister.SELECT_BY_MONTH, month, year);
+			}
+
 			System.out.println("Number of records found:" + ajIndoorRegisters.size());
 			return new IndoorRegisterTransformer().transformList(ajIndoorRegisters, true);
 		} catch (Throwable t) {
@@ -96,12 +112,33 @@ public class IndoorRegisterDao {
 			irToUpdate.setString(AJIndoorRegister.DIAGNOSIS, register.getDiagnosis());
 			irToUpdate.setDouble(AJIndoorRegister.FEES, register.getFees());
 			irToUpdate.setString(AJIndoorRegister.REMARKS, register.getRemarks());
+			irToUpdate.setInteger(AJIndoorRegister.DR_ID, register.getDrId());
 			
 			irToUpdate.save();
 			Base.commitTransaction();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Base.rollbackTransaction();
+		} finally {
+			Base.close();
+		}
+	}
+	
+	public void assign(int id, int drId) {
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+			conn.setReadOnly(false);
+			Base.openTransaction();
+			AJIndoorRegister irToAssign = AJIndoorRegister.findById(id);
+			if(irToAssign != null) {
+				irToAssign.setInteger(AJIndoorRegister.DR_ID, drId);
+				irToAssign.save();
+			}
+			Base.commitTransaction();
+		} catch (SQLException e) {
+			Base.rollbackTransaction();
+			e.printStackTrace();
 		} finally {
 			Base.close();
 		}

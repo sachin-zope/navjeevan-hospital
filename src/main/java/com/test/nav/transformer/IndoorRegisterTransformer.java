@@ -73,7 +73,6 @@ public class IndoorRegisterTransformer {
 		register.setTreatment(ajIndoorRegister.getString(AJIndoorRegister.TREATMENT));
 		register.setRemarks(ajIndoorRegister.getString(AJIndoorRegister.REMARKS));
 		register.setFees(ajIndoorRegister.getDouble(AJIndoorRegister.FEES));
-		System.out.println("is bill generated: " + ajIndoorRegister.getBoolean(AJIndoorRegister.IS_BILL_GENERATED));
 		register.setBillGenerated(ajIndoorRegister.getBoolean(AJIndoorRegister.IS_BILL_GENERATED));
 		register.setCreateDate(ajIndoorRegister.getDate(AJIndoorRegister.CREATE_DATE));
 		register.setUpdateDate(ajIndoorRegister.getDate(AJIndoorRegister.UPDATE_DATE));
@@ -88,7 +87,12 @@ public class IndoorRegisterTransformer {
 		if (ajIndoorRegister.getInteger(AJIndoorRegister.OT_REGISTER_ID) != null) {
 			register.setOtRegisterId(ajIndoorRegister.getInteger(AJIndoorRegister.OT_REGISTER_ID));
 		}
-		System.out.println("check##11" + register.toString());
+		
+		if (ajIndoorRegister.getInteger(AJIndoorRegister.DR_ID) != null) {
+			register.setDrId(ajIndoorRegister.getInteger(AJIndoorRegister.DR_ID));
+		} else {
+			register.setDrId(0);
+		}
 		return register;
 	}
 }
