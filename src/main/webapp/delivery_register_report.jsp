@@ -23,7 +23,8 @@
 	<script>
 		$(document).ready(function() {
 		    $('#example').DataTable({
-		    	"order" : []	
+		    	"order" : [],
+		    	"dom": '<"top"flp<"clear">>rt<"bottom"ifp<"clear">>'
 		    });
 		} );
 	</script>

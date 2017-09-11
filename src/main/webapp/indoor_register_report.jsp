@@ -23,7 +23,8 @@
 	<script>
 		$(document).ready(function() {
 		    var indoorTable = $('#example').DataTable({
-		    	"order" : []	
+		    	"order" : [],
+		    	"dom": '<"top"flp<"clear">>rt<"bottom"ifp<"clear">>'
 		    });
 		    
 		    $("#monthlyTotal").val(indoorTable.column(5).data().sum());
