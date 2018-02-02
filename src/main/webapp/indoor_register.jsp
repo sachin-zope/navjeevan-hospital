@@ -364,6 +364,7 @@ $(document).ready(function () {
 							<option>Primigravida with CPD</option>
 							<option>Primigravida with PIH with oligohydramnios</option>
 							<option>Primigravida with failure to progress</option>
+							<option>Primigravida with fetal distress</option>
 							<option>G2P1L1 with previous LSCS with CPD</option>
 							<option>Primigravida with breech presentation</option>
 							<option>G2P1L1 with previous LSCS</option>

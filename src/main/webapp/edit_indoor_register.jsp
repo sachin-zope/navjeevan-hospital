@@ -237,6 +237,7 @@ $(document).ready(function () {
 							<option value="Primigravida with CPD">Primigravida with CPD</option>
 							<option value="Primigravida with PIH with oligohydramnios">Primigravida with PIH with oligohydramnios</option>
 							<option value="Primigravida with failure to progress">Primigravida with failure to progress</option>
+							<option value="Primigravida with fetal distress">Primigravida with fetal distress</option>
 							<option value="G2P1L1 with previous LSCS with CPD">G2P1L1 with previous LSCS with CPD</option>
 							<option value="Primigravida with breech presentation">Primigravida with breech presentation</option>
 							<option value="G2P1L1 with previous LSCS">G2P1L1 with previous LSCS</option>
