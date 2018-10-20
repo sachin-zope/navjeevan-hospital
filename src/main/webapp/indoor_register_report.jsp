@@ -103,6 +103,8 @@
 		<div class="row">
 			<div class="col-sm-6">
 				<a href="IndoorRegisterController?action=print" target="_blank">Print Report</a>
+				<span class="separotor">|</span>
+				<a href="IndoorRegisterController?action=download" target="_blank">Download Report</a>
 			</div>
 			<div class="col-sm-6" style="text-align: right;">
 				Monthly Total: <input type="text" name="monthlyTotal" id="monthlyTotal" value="" disabled="disabled"/>

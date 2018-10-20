@@ -377,6 +377,7 @@ $(document).ready(function () {
 							<option>Uterine prolapse with CRE</option>
 							<option>Fibroid uterus</option>
 							<option>Infertility for diagnostic laparoscopy</option>
+							<option>Breast Abcess</option>
 							<option>Ovarian cyst</option>
 							<option value="other">Other</option>
 						</select>
@@ -405,6 +406,8 @@ $(document).ready(function () {
 							<option value="Laparoscopic Hysterectomy">Laparoscopic Hysterectomy</option>
 							<option value="D and E">D and E</option>
 							<option value="Cervical Encirclage">Cervical Encirclage</option>
+							<option value="Hysteroscopy">Hysteroscopy</option>
+							<option value="Incision And Drainage">Incision And Drainage</option>
 							<option value="Other">Other</option>
 						</select>
 						<div id="treatmentOther">

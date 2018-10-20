@@ -250,6 +250,7 @@ $(document).ready(function () {
 							<option value="Uterine prolapse with CRE">Uterine prolapse with CRE</option>
 							<option value="Fibroid uterus">Fibroid uterus</option>
 							<option value="Infertility for diagnostic laparoscopy">Infertility for diagnostic laparoscopy</option>
+							<option value="Breast Abcess">Breast Abcess</option>
 							<option value="Ovarian cyst">Ovarian cyst</option>
 							<option value="other">Other</option>
 						</select>
@@ -279,6 +280,8 @@ $(document).ready(function () {
 							<option value="Laparoscopic Hysterectomy">Laparoscopic Hysterectomy</option>
 							<option value="D and E">D and E</option>
 							<option value="Cervical Encirclage">Cervical Encirclage</option>
+							<option value="Hysteroscopy">Hysteroscopy</option>
+							<option value="Incision And Drainage">Incision And Drainage</option>
 							<option value="other">Other</option>
 						</select>
 						<div id="treatmentOther">

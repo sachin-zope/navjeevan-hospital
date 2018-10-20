@@ -1,12 +1,16 @@
 package com.test.nav.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +23,7 @@ import com.test.nav.model.DTOIndoorRegister;
 import com.test.nav.model.DTOMtpRegister;
 import com.test.nav.model.DTOOTRegister;
 import com.test.nav.util.AppUtil;
+import com.test.nav.util.ReportWritingUtils;
 
 /**
  * Servlet implementation class IndoorRegisterController
@@ -47,6 +52,7 @@ public class IndoorRegisterController extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String forward = "";
+		boolean isForward = true;
 		String action = request.getParameter("action");
 		System.out.println("get action = " + action);
 
@@ -124,6 +130,53 @@ public class IndoorRegisterController extends HttpServlet {
 				HttpSession session = request.getSession();
 				List<DTOIndoorRegister> indoorList = (List<DTOIndoorRegister>) session.getAttribute("INDOOR_LIST");
 				request.setAttribute("irs", indoorList);
+			} else if (action.equalsIgnoreCase("download")) {
+				HttpSession session = request.getSession();
+				ServletContext context = getServletContext();
+				List<DTOIndoorRegister> indoorList = (List<DTOIndoorRegister>) session.getAttribute("INDOOR_LIST");
+				String month = session.getAttribute("REPORT_MONTH").toString();
+				String year = session.getAttribute("REPORT_YEAR").toString();
+				
+				// write to file
+				String fileDir = context.getRealPath("/downloads");
+				String fileName = "IndoorRegister_" + month + year + ".xlsx";
+				// For windows the path should be "\" 
+				String filePath = fileDir + "\\" + fileName;
+		        System.out.println("writing file  = " + filePath);
+		        
+		        new ReportWritingUtils().write(filePath, indoorList);
+		        
+		        File downloadFile = new File(filePath);
+		        FileInputStream inStream = new FileInputStream(downloadFile);
+		        String mimeType = context.getMimeType(filePath);
+		        if (mimeType == null) {        
+		            // set to binary type if MIME mapping not found
+		            mimeType = "application/octet-stream";
+		        }
+		        System.out.println("MIME type: " + mimeType);
+		         
+		        // modifies response
+		        response.setContentType(mimeType);
+		        response.setContentLength((int) downloadFile.length());
+		        
+		        // forces download
+		        String headerKey = "Content-Disposition";
+		        String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
+		        response.setHeader(headerKey, headerValue);
+		         
+		        // obtains response's output stream
+		        OutputStream outStream = response.getOutputStream();
+		         
+		        byte[] buffer = new byte[4096];
+		        int bytesRead = -1;
+		         
+		        while ((bytesRead = inStream.read(buffer)) != -1) {
+		            outStream.write(buffer, 0, bytesRead);
+		        }
+		         
+		        inStream.close();
+		        outStream.close();     
+		        isForward = false;
 			} else {
 				forward = INSERT;
 			}
@@ -131,8 +184,10 @@ public class IndoorRegisterController extends HttpServlet {
 			forward = INSERT;
 		}
 
-		RequestDispatcher view = request.getRequestDispatcher(forward);
-		view.forward(request, response);
+		if (isForward) {
+			RequestDispatcher view = request.getRequestDispatcher(forward);
+			view.forward(request, response);
+		}
 	}
 
 	/**

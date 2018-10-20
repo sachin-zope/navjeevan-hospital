@@ -137,6 +137,7 @@ public class BillDao {
 		} else {
 			long diff = indoorRegister.getDischargeDate().getTime() - indoorRegister.getAdmitDate().getTime();
 			totalDays = (int) diff / (24 * 60 * 60 * 1000);
+			totalDays = totalDays + 1;
 		}
 		int fees = (int) indoorRegister.getFees();
 		
